@@ -1,0 +1,1 @@
+ build\\web\\manifest.json:  F:\\repo\\Live\ ledger\ 2\\web\\index.html F:\\repo\\Live\ ledger\ 2\\web\\manifest.json
