@@ -1,5 +1,5 @@
 [build]
-  command = "curl -sL https://storage.googleapis.com/download.flutter.io/flutter_linux_v3.7.0-stable.tar.xz | tar xJf - && export PATH=\"$PATH:$PWD/flutter/bin\" && flutter doctor && flutter build web --release"
+  command = "curl -sL https://storage.googleapis.com/download.flutter.io/flutter_linux_v3.7.0-stable.tar.xz | tar -xvJf - && export PATH=\"$PATH:$PWD/flutter/bin\" && flutter doctor && flutter build web --release"
   publish = "build/web"
 
 [[redirects]]
