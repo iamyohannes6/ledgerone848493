@@ -4,13 +4,113 @@ import '../models/crypto_currency.dart';
 
 class StorageService {
   static const String _cryptoKey = 'crypto_currencies';
+  List<CryptoCurrency> _currencies = [];
+
+  StorageService() {
+    _loadFromStorage();
+  }
+
+  void _loadFromStorage() {
+    final storedData = html.window.localStorage[_cryptoKey];
+    if (storedData != null) {
+      try {
+        final List<dynamic> jsonList = json.decode(storedData);
+        _currencies = jsonList.map((json) => CryptoCurrency.fromJson(json)).toList();
+      } catch (e) {
+        print('Error loading from storage: $e');
+        _initializeDefaultCurrencies();
+      }
+    } else {
+      _initializeDefaultCurrencies();
+    }
+  }
+
+  void _initializeDefaultCurrencies() {
+    _currencies = [
+      CryptoCurrency(
+        icon: '₿',
+        name: 'Bitcoin',
+        symbol: 'BTC',
+        amount: 2.5,
+        value: 48000,
+        iconColor: 'F7931A',
+        logoUrl: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
+      ),
+      CryptoCurrency(
+        icon: 'Ξ',
+        name: 'Ethereum',
+        symbol: 'ETH',
+        amount: 10.2,
+        value: 2500,
+        iconColor: '627EEA',
+        logoUrl: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+      ),
+      CryptoCurrency(
+        icon: '₮',
+        name: 'Tether',
+        symbol: 'USDT',
+        amount: 5000,
+        value: 1,
+        iconColor: '26A17B',
+        logoUrl: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
+      ),
+      CryptoCurrency(
+        icon: '✕',
+        name: 'Ripple',
+        symbol: 'XRP',
+        amount: 15000,
+        value: 0.5,
+        iconColor: '23292F',
+        logoUrl: 'https://cryptologos.cc/logos/xrp-xrp-logo.png',
+      ),
+      CryptoCurrency(
+        icon: '◎',
+        name: 'Solana',
+        symbol: 'SOL',
+        amount: 150,
+        value: 100,
+        iconColor: '00FFA3',
+        logoUrl: 'https://cryptologos.cc/logos/solana-sol-logo.png',
+      ),
+    ];
+    _saveToStorage();
+  }
+
+  void _saveToStorage() {
+    final jsonList = _currencies.map((currency) => currency.toJson()).toList();
+    html.window.localStorage[_cryptoKey] = json.encode(jsonList);
+  }
 
   List<CryptoCurrency> getCryptoCurrencies() {
-    final String? data = html.window.localStorage[_cryptoKey];
-    if (data == null) return _getDefaultCryptoCurrencies();
+    return List.from(_currencies);
+  }
 
-    List<dynamic> jsonList = json.decode(data);
-    return jsonList.map((json) => CryptoCurrency.fromJson(json)).toList();
+  void addCurrency(CryptoCurrency currency) {
+    _currencies.add(currency);
+    _saveToStorage();
+  }
+
+  void updateCurrency(int index, CryptoCurrency currency) {
+    if (index >= 0 && index < _currencies.length) {
+      _currencies[index] = currency;
+      _saveToStorage();
+    }
+  }
+
+  void updateCurrencies(List<CryptoCurrency> currencies) {
+    _currencies = currencies;
+    _saveToStorage();
+  }
+
+  void deleteCurrency(int index) {
+    if (index >= 0 && index < _currencies.length) {
+      _currencies.removeAt(index);
+      _saveToStorage();
+    }
+  }
+
+  double getTotalBalance() {
+    return _currencies.fold(0.0, (sum, currency) => sum + (currency.amount * currency.value));
   }
 
   Future<void> saveCryptoCurrencies(List<CryptoCurrency> currencies) async {
@@ -45,47 +145,46 @@ class StorageService {
         name: 'Bitcoin',
         symbol: 'BTC',
         amount: 0,
-        price: 48000,
-        iconColor: 'FFF7931A',
+        value: 48000,
+        iconColor: 'F7931A',
+        logoUrl: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
       ),
       CryptoCurrency(
         icon: 'Ξ',
         name: 'Ethereum',
         symbol: 'ETH',
         amount: 0,
-        price: 2500,
-        iconColor: 'FF627EEA',
+        value: 2500,
+        iconColor: '627EEA',
+        logoUrl: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
       ),
       CryptoCurrency(
         icon: '₮',
         name: 'Tether USD',
         symbol: 'USDT',
         amount: 0,
-        price: 1,
-        iconColor: 'FF26A17B',
+        value: 1,
+        iconColor: '26A17B',
+        logoUrl: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
       ),
       CryptoCurrency(
         icon: 'X',
         name: 'XRP',
         symbol: 'XRP',
         amount: 0,
-        price: 0.5,
-        iconColor: 'FF23292F',
+        value: 0.5,
+        iconColor: '23292F',
+        logoUrl: 'https://cryptologos.cc/logos/xrp-xrp-logo.png',
       ),
       CryptoCurrency(
         icon: 'S',
         name: 'Solana',
         symbol: 'SOL',
         amount: 0,
-        price: 100,
-        iconColor: 'FF00FFA3',
+        value: 100,
+        iconColor: '00FFA3',
+        logoUrl: 'https://cryptologos.cc/logos/solana-sol-logo.png',
       ),
     ];
-  }
-
-  double getTotalBalance() {
-    return getCryptoCurrencies()
-        .map((currency) => currency.value)
-        .fold(0, (prev, curr) => prev + curr);
   }
 }

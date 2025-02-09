@@ -26,10 +26,6 @@ cupertino_icons
 3.1
 file:///C:/Users/Kinet/AppData/Local/Pub/Cache/hosted/pub.dev/cupertino_icons-1.0.8/
 file:///C:/Users/Kinet/AppData/Local/Pub/Cache/hosted/pub.dev/cupertino_icons-1.0.8/lib/
-curved_navigation_bar
-2.12
-file:///C:/Users/Kinet/AppData/Local/Pub/Cache/hosted/pub.dev/curved_navigation_bar-1.0.6/
-file:///C:/Users/Kinet/AppData/Local/Pub/Cache/hosted/pub.dev/curved_navigation_bar-1.0.6/lib/
 equatable
 2.12
 file:///C:/Users/Kinet/AppData/Local/Pub/Cache/hosted/pub.dev/equatable-2.0.7/
@@ -126,6 +122,10 @@ plugin_platform_interface
 3.0
 file:///C:/Users/Kinet/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.8/
 file:///C:/Users/Kinet/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.8/lib/
+pull_to_refresh
+2.12
+file:///C:/Users/Kinet/AppData/Local/Pub/Cache/hosted/pub.dev/pull_to_refresh-2.0.0/
+file:///C:/Users/Kinet/AppData/Local/Pub/Cache/hosted/pub.dev/pull_to_refresh-2.0.0/lib/
 source_span
 2.18
 file:///C:/Users/Kinet/AppData/Local/Pub/Cache/hosted/pub.dev/source_span-1.10.0/

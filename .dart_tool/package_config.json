@@ -44,12 +44,6 @@
       "languageVersion": "3.1"
     },
     {
-      "name": "curved_navigation_bar",
-      "rootUri": "file:///C:/Users/Kinet/AppData/Local/Pub/Cache/hosted/pub.dev/curved_navigation_bar-1.0.6",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "equatable",
       "rootUri": "file:///C:/Users/Kinet/AppData/Local/Pub/Cache/hosted/pub.dev/equatable-2.0.7",
       "packageUri": "lib/",
@@ -206,6 +200,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "pull_to_refresh",
+      "rootUri": "file:///C:/Users/Kinet/AppData/Local/Pub/Cache/hosted/pub.dev/pull_to_refresh-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///C:/Users/Kinet/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -284,7 +284,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2025-02-08T10:23:56.495216Z",
+  "generated": "2025-02-08T22:59:35.417113Z",
   "generator": "pub",
   "generatorVersion": "3.6.2",
   "flutterRoot": "file:///C:/Users/Kinet/flutter",

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../models/crypto_currency.dart';
 import '../services/storage_service.dart';
+import '../services/coinmarketcap_service.dart';
 
 class AdminPanel extends StatefulWidget {
   final StorageService storageService;
@@ -12,301 +14,226 @@ class AdminPanel extends StatefulWidget {
 }
 
 class _AdminPanelState extends State<AdminPanel> {
-  late List<CryptoCurrency> _currencies;
+  final CoinMarketCapService _coinService = CoinMarketCapService();
+  List<CryptoCurrency> _availableCurrencies = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _currencies = widget.storageService.getCryptoCurrencies();
+    _loadCurrencies();
   }
 
-  void _updateCurrency(int index) async {
-    final currency = _currencies[index];
-    final result = await showDialog<CryptoCurrency>(
-      context: context,
-      builder: (context) => EditCurrencyDialog(currency: currency),
-    );
-
-    if (result != null) {
-      await widget.storageService.updateCryptoCurrency(result);
+  Future<void> _loadCurrencies() async {
+    try {
       setState(() {
-        _currencies = widget.storageService.getCryptoCurrencies();
+        _isLoading = true;
       });
-    }
-  }
-
-  void _addCurrency() async {
-    final result = await showDialog<CryptoCurrency>(
-      context: context,
-      builder: (context) => const AddCurrencyDialog(),
-    );
-
-    if (result != null) {
-      try {
-        await widget.storageService.addCryptoCurrency(result);
-        setState(() {
-          _currencies = widget.storageService.getCryptoCurrencies();
-        });
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(e.toString())),
-          );
-        }
+      
+      // Load current currencies from storage first
+      _availableCurrencies = widget.storageService.getCryptoCurrencies();
+      
+      // Update with latest prices from API
+      final updatedCurrencies = await _coinService.getUpdatedCryptocurrencies(_availableCurrencies);
+      
+      setState(() {
+        _availableCurrencies = updatedCurrencies;
+        _isLoading = false;
+      });
+      
+      // Save the updated currencies back to storage
+      widget.storageService.updateCurrencies(_availableCurrencies);
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading cryptocurrencies: $e')),
+        );
       }
     }
+  }
+
+  void _updateCurrency(int index, CryptoCurrency currency) {
+    setState(() {
+      _availableCurrencies[index] = currency;
+    });
+    widget.storageService.updateCurrency(index, currency);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Admin Panel'),
-        backgroundColor: const Color(0xFF9D7BEE),
-        foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => _addCurrency(),
-          ),
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: _currencies.length,
-        itemBuilder: (context, index) {
-          final currency = _currencies[index];
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Color(int.parse('0x${currency.iconColor}')),
-              child: Text(
-                currency.icon,
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-            title: Text(currency.name),
-            subtitle: Text('${currency.amount} ${currency.symbol}'),
-            trailing: Text(
-              '\$${(currency.value).toStringAsFixed(2)}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onTap: () => _updateCurrency(index),
-          );
-        },
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        color: Colors.grey[100],
-        child: Text(
-          'Total Balance: \$${widget.storageService.getTotalBalance().toStringAsFixed(2)}',
-          style: const TextStyle(
-            fontSize: 20,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Manage Cryptocurrencies',
+          style: GoogleFonts.inter(
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
-          textAlign: TextAlign.center,
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: _availableCurrencies.length,
+              itemBuilder: (context, index) {
+                final currency = _availableCurrencies[index];
+                return CurrencyListItem(
+                  currency: currency,
+                  onToggle: (enabled) {
+                    _updateCurrency(
+                      index,
+                      currency.copyWith(isEnabled: enabled),
+                    );
+                  },
+                  onAmountChanged: (amount) {
+                    _updateCurrency(
+                      index,
+                      currency.copyWith(amount: amount),
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 }
 
-class EditCurrencyDialog extends StatefulWidget {
+class CurrencyListItem extends StatelessWidget {
   final CryptoCurrency currency;
+  final Function(bool) onToggle;
+  final Function(double) onAmountChanged;
 
-  const EditCurrencyDialog({super.key, required this.currency});
+  const CurrencyListItem({
+    super.key,
+    required this.currency,
+    required this.onToggle,
+    required this.onAmountChanged,
+  });
 
-  @override
-  State<EditCurrencyDialog> createState() => _EditCurrencyDialogState();
-}
-
-class _EditCurrencyDialogState extends State<EditCurrencyDialog> {
-  late TextEditingController _amountController;
-  late TextEditingController _priceController;
-
-  @override
-  void initState() {
-    super.initState();
-    _amountController = TextEditingController(
-      text: widget.currency.amount.toString(),
-    );
-    _priceController = TextEditingController(
-      text: widget.currency.price.toString(),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Edit ${widget.currency.name}'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _amountController,
-            decoration: const InputDecoration(labelText: 'Amount'),
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+  void _showAmountDialog(BuildContext context) {
+    final controller = TextEditingController(text: currency.amount.toString());
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Edit ${currency.name} Amount'),
+        content: TextField(
+          controller: controller,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          decoration: const InputDecoration(
+            labelText: 'Amount',
+            hintText: 'Enter amount',
           ),
-          TextField(
-            controller: _priceController,
-            decoration: const InputDecoration(labelText: 'Price (USD)'),
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              final amount = double.tryParse(controller.text);
+              if (amount != null) {
+                onAmountChanged(amount);
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Save'),
           ),
         ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () {
-            final updatedCurrency = CryptoCurrency(
-              icon: widget.currency.icon,
-              name: widget.currency.name,
-              symbol: widget.currency.symbol,
-              amount: double.parse(_amountController.text),
-              price: double.parse(_priceController.text),
-              iconColor: widget.currency.iconColor,
-            );
-            Navigator.pop(context, updatedCurrency);
-          },
-          child: const Text('Save'),
-        ),
-      ],
     );
   }
-
-  @override
-  void dispose() {
-    _amountController.dispose();
-    _priceController.dispose();
-    super.dispose();
-  }
-}
-
-class AddCurrencyDialog extends StatefulWidget {
-  const AddCurrencyDialog({super.key});
-
-  @override
-  State<AddCurrencyDialog> createState() => _AddCurrencyDialogState();
-}
-
-class _AddCurrencyDialogState extends State<AddCurrencyDialog> {
-  final _formKey = GlobalKey<FormState>();
-  final _iconController = TextEditingController();
-  final _nameController = TextEditingController();
-  final _symbolController = TextEditingController();
-  final _priceController = TextEditingController();
-  final _iconColorController = TextEditingController(text: 'FF9D7BEE');
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Add New Currency'),
-      content: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: _iconController,
-                decoration: const InputDecoration(labelText: 'Icon Symbol (e.g., ₿)'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an icon symbol';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Name (e.g., Bitcoin)'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a name';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _symbolController,
-                decoration: const InputDecoration(labelText: 'Symbol (e.g., BTC)'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a symbol';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _priceController,
-                decoration: const InputDecoration(labelText: 'Price (USD)'),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a price';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _iconColorController,
-                decoration: const InputDecoration(
-                  labelText: 'Icon Color (hex, e.g., FF9D7BEE)',
-                  hintText: 'FF9D7BEE',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a color';
-                  }
-                  if (!RegExp(r'^[0-9A-Fa-f]{8}$').hasMatch(value)) {
-                    return 'Please enter a valid 8-digit hex color';
-                  }
-                  return null;
-                },
-              ),
-            ],
-          ),
-        ),
+    return Container(
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              final newCurrency = CryptoCurrency(
-                icon: _iconController.text,
-                name: _nameController.text,
-                symbol: _symbolController.text.toUpperCase(),
-                amount: 0,
-                price: double.parse(_priceController.text),
-                iconColor: _iconColorController.text,
-              );
-              Navigator.pop(context, newCurrency);
-            }
-          },
-          child: const Text('Add'),
-        ),
-      ],
+      child: Row(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: Color(int.parse('0xFF${currency.iconColor}')),
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Image.network(
+                currency.logoUrl,
+                width: 32,
+                height: 32,
+                errorBuilder: (context, error, stackTrace) {
+                  return Center(
+                    child: Text(
+                      currency.icon,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  currency.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Text(
+                      currency.symbol,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => _showAmountDialog(context),
+                      child: Text(
+                        'Amount: ${currency.amount}',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Switch(
+            value: currency.isEnabled,
+            onChanged: onToggle,
+            activeColor: const Color(0xFF9D7BEE),
+          ),
+        ],
+      ),
     );
-  }
-
-  @override
-  void dispose() {
-    _iconController.dispose();
-    _nameController.dispose();
-    _symbolController.dispose();
-    _priceController.dispose();
-    _iconColorController.dispose();
-    super.dispose();
   }
 }
