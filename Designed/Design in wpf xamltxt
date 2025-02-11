@@ -1,0 +1,1205 @@
+<Canvas
+  Width="390"
+  Height="844">
+  <Canvas.Fill>
+    <LinearGradientBrush
+      StartPoint="0.46153846, -0.06042654"
+      EndPoint="0.46153846, 0.3270142">
+      <GradientStop
+        Color="#5A417D"
+        Offset="0" />
+      <GradientStop
+        Color="#131016"
+        Offset="1" />
+    </LinearGradientBrush>
+  </Canvas.Fill>
+  <Canvas.RenderTransform>
+    <TranslateTransform
+      X="47"
+      Y="4" />
+  </Canvas.RenderTransform>
+  <Canvas
+    Width="390"
+    Height="579">
+    <Canvas
+      Width="390"
+      Height="29">
+      <Canvas.RenderTransform>
+        <TranslateTransform
+          X="0"
+          Y="8" />
+      </Canvas.RenderTransform>
+      <TextBlock
+        Width="65"
+        Height="29"
+        LineHeight="29.039062"
+        TextWrapping="Wrap"
+        TextAlignment="Left"
+        VerticalAlignment="Top"
+        FontFamily="Inter Tight"
+        FontSize="24"
+        FontWeight="Medium"
+        FontStretch="Normal"
+        Foreground="#FEF8FF"
+        Text="Wallet">
+        <TextBlock.RenderTransform>
+          <TranslateTransform
+            X="16"
+            Y="0" />
+        </TextBlock.RenderTransform>
+      </TextBlock>
+      <Canvas
+        Width="150"
+        Height="18">
+        <Canvas.RenderTransform>
+          <TranslateTransform
+            X="224"
+            Y="5.5" />
+        </Canvas.RenderTransform>
+        <Canvas
+          Width="18"
+          Height="14">
+          <Canvas.RenderTransform>
+            <TranslateTransform
+              X="0"
+              Y="2" />
+          </Canvas.RenderTransform>
+          <Canvas
+            ClipToBounds="True"
+            Width="17.62"
+            Height="13.9">
+            <Canvas.Background>
+              <SolidColorBrush
+                Color="#000000" />
+            </Canvas.Background>
+            <Canvas.RenderTransform>
+              <TranslateTransform
+                X="0"
+                Y="-0" />
+            </Canvas.RenderTransform>
+            <Path
+              Width="17.62"
+              Height="13.9">
+              <Path.Fill>
+                <SolidColorBrush
+                  Color="#FEF8FF" />
+              </Path.Fill>
+              <Path.Data>
+                <GeometryGroup>
+                  <PathGeometry
+                    Figures="M16.8828 0C17.2893 0 17.6192 0.324448 17.6192 0.724847C17.6192 3.12187 17.6192 10.779 17.6192 13.176C17.6192 13.5764 17.2893 13.9008 16.8828 13.9008C14.014 13.9008 3.60515 13.9008 0.736381 13.9008C0.329826 13.9008 0 13.5764 0 13.176C0 10.779 0 3.12187 0 0.724847C0 0.324448 0.329826 0 0.736381 0C3.60515 0 14.014 0 16.8828 0C16.8828 0 16.8828 0 16.8828 0Z" />
+                  <RectangleGeometry
+                    Rect="1.76,5.64,14.22,6.73" />
+                  <RectangleGeometry
+                    Rect="1.76,1.52,14.22,2.59" />
+                </GeometryGroup>
+              </Path.Data>
+            </Path>
+            <Rectangle
+              Width="3.79"
+              Height="2.07">
+              <Rectangle.Fill>
+                <SolidColorBrush
+                  Color="#FEF8FF" />
+              </Rectangle.Fill>
+              <Rectangle.RenderTransform>
+                <TranslateTransform
+                  X="10.53"
+                  Y="8.57" />
+              </Rectangle.RenderTransform>
+            </Rectangle>
+          </Canvas>
+        </Canvas>
+        <Canvas
+          Width="18"
+          Height="11.45">
+          <Canvas.RenderTransform>
+            <TranslateTransform
+              X="44"
+              Y="3.27" />
+          </Canvas.RenderTransform>
+          <Canvas
+            ClipToBounds="True"
+            Width="17.75"
+            Height="11.27">
+            <Canvas.Background>
+              <SolidColorBrush
+                Color="#000000" />
+            </Canvas.Background>
+            <Canvas.RenderTransform>
+              <TranslateTransform
+                X="-0"
+                Y="-0" />
+            </Canvas.RenderTransform>
+            <Canvas
+              ClipToBounds="True"
+              Width="17.75"
+              Height="11.27">
+              <Canvas.Background>
+                <SolidColorBrush
+                  Color="#000000" />
+              </Canvas.Background>
+              <Canvas
+                ClipToBounds="True"
+                Width="17.75"
+                Height="6.87">
+                <Canvas.Background>
+                  <SolidColorBrush
+                    Color="#000000" />
+                </Canvas.Background>
+                <Canvas.RenderTransform>
+                  <TranslateTransform
+                    X="0"
+                    Y="4.4" />
+                </Canvas.RenderTransform>
+                <Path
+                  Width="17.75"
+                  Height="6.87">
+                  <Path.Fill>
+                    <SolidColorBrush
+                      Color="#FEF8FF" />
+                  </Path.Fill>
+                  <Path.Data>
+                    <GeometryGroup>
+                      <RectangleGeometry
+                        Rect="10.86,0,6.89,6.87" />
+                      <RectangleGeometry
+                        Rect="7.24,0,6.89,6.87" />
+                      <RectangleGeometry
+                        Rect="3.61,0,6.89,6.87" />
+                      <RectangleGeometry
+                        Rect="0,0,6.89,6.87" />
+                    </GeometryGroup>
+                  </Path.Data>
+                </Path>
+              </Canvas>
+              <Path
+                Stretch="Fill"
+                Data="M11.584 2.85838C11.584 2.85838 9.75357 4.24971 9.75357 4.24971C8.81139 3.01765 7.34628 2.29457 5.79202 2.29457C4.23778 2.29457 2.77267 3.01765 1.83009 4.24971C1.83009 4.24971 0 2.85838 0 2.85838C1.3778 1.05721 3.51995 0 5.79202 0C8.06408 0 10.2062 1.05721 11.584 2.85838C11.584 2.85838 11.584 2.85838 11.584 2.85838Z"
+                Width="11.58"
+                Height="4.25">
+                <Path.Fill>
+                  <SolidColorBrush
+                    Color="#FEF8FF" />
+                </Path.Fill>
+                <Path.RenderTransform>
+                  <TranslateTransform
+                    X="3.08"
+                    Y="0" />
+                </Path.RenderTransform>
+              </Path>
+            </Canvas>
+          </Canvas>
+        </Canvas>
+        <Canvas
+          Width="18"
+          Height="18">
+          <Canvas.RenderTransform>
+            <TranslateTransform
+              X="88"
+              Y="0" />
+          </Canvas.RenderTransform>
+          <Canvas
+            ClipToBounds="True"
+            Width="17.69"
+            Height="17.94">
+            <Canvas.Background>
+              <SolidColorBrush
+                Color="#000000" />
+            </Canvas.Background>
+            <Canvas.RenderTransform>
+              <TranslateTransform
+                X="0"
+                Y="-0" />
+            </Canvas.RenderTransform>
+            <Canvas
+              ClipToBounds="True"
+              Width="17.69"
+              Height="17.94">
+              <Canvas.Background>
+                <SolidColorBrush
+                  Color="#000000" />
+              </Canvas.Background>
+              <Rectangle
+                Width="17.69"
+                Height="1.9">
+                <Rectangle.Fill>
+                  <SolidColorBrush
+                    Color="#FEF8FF" />
+                </Rectangle.Fill>
+                <Rectangle.RenderTransform>
+                  <TranslateTransform
+                    X="0"
+                    Y="12.5" />
+                </Rectangle.RenderTransform>
+              </Rectangle>
+              <Rectangle
+                Width="5.38"
+                Height="1.9">
+                <Rectangle.Fill>
+                  <SolidColorBrush
+                    Color="#FEF8FF" />
+                </Rectangle.Fill>
+                <Rectangle.RenderTransform>
+                  <TranslateTransform
+                    X="6.09"
+                    Y="16.04" />
+                </Rectangle.RenderTransform>
+              </Rectangle>
+              <Path
+                Width="13.08"
+                Height="14.41">
+                <Path.Fill>
+                  <SolidColorBrush
+                    Color="#FEF8FF" />
+                </Path.Fill>
+                <Path.RenderTransform>
+                  <TranslateTransform
+                    X="2.23"
+                    Y="0" />
+                </Path.RenderTransform>
+                <Path.Data>
+                  <GeometryGroup>
+                    <PathGeometry
+                      Figures="M6.54346 0C10.1457 0 13.0757 2.99129 13.0757 6.68116C13.0757 6.68116 13.0757 14.4056 13.0757 14.4056L0 14.4056C0 14.4056 0 6.68116 0 6.68116C0 2.99129 2.92999 0 6.54346 0C6.54346 0 6.54346 0 6.54346 0Z" />
+                    <PathGeometry
+                      Figures="M4.85064 0C4.85064 0 4.84004 0 4.84004 0C2.17034 0 0 2.21626 0 4.94834C0 4.94834 0 10.6704 0 10.6704L9.69001 10.6704C9.69001 10.6704 9.69001 4.94834 9.69001 4.94834C9.69001 2.21626 7.51968 0 4.85064 0C4.85064 0 4.85064 0 4.85064 0Z" />
+                  </GeometryGroup>
+                </Path.Data>
+              </Path>
+            </Canvas>
+          </Canvas>
+        </Canvas>
+        <Canvas
+          Width="18"
+          Height="18">
+          <Canvas.RenderTransform>
+            <TranslateTransform
+              X="132"
+              Y="0" />
+          </Canvas.RenderTransform>
+          <Canvas
+            ClipToBounds="True"
+            Width="17.69"
+            Height="17.94">
+            <Canvas.Background>
+              <SolidColorBrush
+                Color="#000000" />
+            </Canvas.Background>
+            <Path
+              Width="17.69"
+              Height="17.94">
+              <Path.Fill>
+                <SolidColorBrush
+                  Color="#FEF8FF" />
+              </Path.Fill>
+              <Path.Data>
+                <GeometryGroup>
+                  <PathGeometry
+                    Figures="M11.3317 15.8768L11.3317 17.9413L6.366 17.9413L6.3289 15.8555L4.2378 14.6214L2.48519 15.6537L0 11.2579L1.81289 10.1834L1.81289 7.74985L0 6.683L2.48519 2.28767L4.35372 3.38911L6.366 2.20335L6.366 0L11.3317 0L11.3317 2.20335L13.3394 3.38911L15.2079 2.28767L17.6932 6.683L15.8849 7.74985L15.8849 10.1834L17.6932 11.2579L15.2079 15.6537L13.4228 14.6427L11.3317 15.8768L11.3317 15.8768Z" />
+                  <PathGeometry
+                    Figures="M10.5621 10.8002L12.579 11.9888L13.548 10.2673C13.548 10.2673 11.5126 9.06684 11.5126 9.06684C11.6703 8.57131 11.7583 8.04309 11.7583 7.49451C11.7583 7.47177 11.7583 7.43292 11.7583 7.41066C11.7491 6.84501 11.6471 6.30164 11.4709 5.79521C11.4709 5.79521 13.548 4.57013 13.548 4.57013L12.579 2.84857C12.579 2.84857 10.474 4.08787 10.474 4.08787C9.76923 3.28867 8.81876 2.71877 7.74769 2.50133C7.74769 2.50133 7.74769 0 7.74769 0L5.80035 0C5.80035 0 5.80035 2.50133 5.80035 2.50133C4.72931 2.71877 3.77882 3.28867 3.07405 4.08787C3.07405 4.08787 0.973668 2.84857 0.973668 2.84857L0 4.57013C0 4.57013 2.07717 5.79521 2.07717 5.79521C1.90098 6.30164 1.80363 6.84501 1.79435 7.41066C1.79435 7.43292 1.79435 7.47177 1.79435 7.49451C1.79435 8.04309 1.87781 8.57131 2.03546 9.06684C2.03546 9.06684 0 10.2673 0 10.2673L0.973668 11.9888C0.973668 11.9888 2.98595 10.8002 2.98595 10.8002C3.33834 11.2171 3.74636 11.5805 4.21465 11.86C4.67367 12.1366 5.2625 12.3783 5.80035 12.4877C5.80035 12.4877 5.80035 14.8374 5.80035 14.8374L7.74769 14.8374C7.74769 14.8374 7.74769 12.4877 7.74769 12.4877C8.29019 12.3783 8.79556 12.1793 9.25922 11.9074C9.72287 11.6231 10.2144 11.2171 10.5621 10.8002C10.5621 10.8002 10.5621 10.8002 10.5621 10.8002Z" />
+                </GeometryGroup>
+              </Path.Data>
+            </Path>
+            <Path
+              Width="6.26"
+              Height="6.4">
+              <Path.Fill>
+                <SolidColorBrush
+                  Color="#FEF8FF" />
+              </Path.Fill>
+              <Path.RenderTransform>
+                <TranslateTransform
+                  X="5.72"
+                  Y="5.77" />
+              </Path.RenderTransform>
+              <Path.Data>
+                <GeometryGroup>
+                  <PathGeometry
+                    Figures="M3.12665 0C4.85812 0 6.25784 1.43293 6.25784 3.19833C6.25784 4.96372 4.85812 6.39712 3.12665 6.39712C1.39973 6.39712 0 4.96372 0 3.19833C0 1.43293 1.39973 0 3.12665 0C3.12665 0 3.12665 0 3.12665 0Z" />
+                  <PathGeometry
+                    Figures="M1.56332 0C2.4268 0 3.13119 0.716466 3.13119 1.59916C3.13119 2.48186 2.4268 3.19879 1.56332 3.19879C0.699849 3.19879 0 2.48186 0 1.59916C0 0.716466 0.699849 0 1.56332 0C1.56332 0 1.56332 0 1.56332 0Z" />
+                </GeometryGroup>
+              </Path.Data>
+            </Path>
+          </Canvas>
+        </Canvas>
+      </Canvas>
+    </Canvas>
+    <Canvas
+      Width="390"
+      Height="46">
+      <Canvas.RenderTransform>
+        <TranslateTransform
+          X="0"
+          Y="53" />
+      </Canvas.RenderTransform>
+      <Canvas
+        Width="63"
+        Height="30">
+        <Canvas.Background>
+          <SolidColorBrush
+            Color="#846ED3" />
+        </Canvas.Background>
+        <Canvas.RenderTransform>
+          <TranslateTransform
+            X="16"
+            Y="0" />
+        </Canvas.RenderTransform>
+        <TextBlock
+          Width="39"
+          Height="15"
+          LineHeight="15.124512"
+          TextWrapping="Wrap"
+          TextAlignment="Center"
+          VerticalAlignment="Top"
+          FontFamily="Inter Tight"
+          FontSize="12.5"
+          FontWeight="SemiBold"
+          FontStretch="Normal"
+          Foreground="#FFFFFF"
+          Text="Crypto">
+          <TextBlock.RenderTransform>
+            <TranslateTransform
+              X="12"
+              Y="7.5" />
+          </TextBlock.RenderTransform>
+        </TextBlock>
+      </Canvas>
+      <Canvas
+        Width="53"
+        Height="30">
+        <Canvas.Background>
+          <SolidColorBrush
+            Color="#534669" />
+        </Canvas.Background>
+        <Canvas.RenderTransform>
+          <TranslateTransform
+            X="91"
+            Y="0" />
+        </Canvas.RenderTransform>
+        <TextBlock
+          Width="29"
+          Height="15"
+          LineHeight="15.124512"
+          TextWrapping="Wrap"
+          TextAlignment="Center"
+          VerticalAlignment="Top"
+          FontFamily="Inter Tight"
+          FontSize="12.5"
+          FontWeight="SemiBold"
+          FontStretch="Normal"
+          Foreground="#DDD5E6"
+          Text="NFTs">
+          <TextBlock.RenderTransform>
+            <TranslateTransform
+              X="12"
+              Y="7.5" />
+          </TextBlock.RenderTransform>
+        </TextBlock>
+      </Canvas>
+      <Canvas
+        Width="64"
+        Height="30">
+        <Canvas.Background>
+          <SolidColorBrush
+            Color="#534669" />
+        </Canvas.Background>
+        <Canvas.RenderTransform>
+          <TranslateTransform
+            X="156"
+            Y="0" />
+        </Canvas.RenderTransform>
+        <TextBlock
+          Width="40"
+          Height="15"
+          LineHeight="15.124512"
+          TextWrapping="Wrap"
+          TextAlignment="Center"
+          VerticalAlignment="Top"
+          FontFamily="Inter Tight"
+          FontSize="12.5"
+          FontWeight="SemiBold"
+          FontStretch="Normal"
+          Foreground="#DDD5E6"
+          Text="Market">
+          <TextBlock.RenderTransform>
+            <TranslateTransform
+              X="12"
+              Y="7.5" />
+          </TextBlock.RenderTransform>
+        </TextBlock>
+      </Canvas>
+    </Canvas>
+    <Canvas
+      Width="390"
+      Height="305">
+      <Canvas.RenderTransform>
+        <TranslateTransform
+          X="0"
+          Y="115" />
+      </Canvas.RenderTransform>
+      <Canvas
+        Width="390"
+        Height="73">
+        <Canvas.RenderTransform>
+          <TranslateTransform
+            X="0"
+            Y="16" />
+        </Canvas.RenderTransform>
+        <TextBlock
+          Width="155"
+          Height="49"
+          LineHeight="48.398438"
+          TextWrapping="Wrap"
+          TextAlignment="Center"
+          VerticalAlignment="Center"
+          FontFamily="Inter Tight"
+          FontSize="40"
+          FontWeight="Medium"
+          FontStretch="Normal"
+          Foreground="#FDFAFF"
+          Text="10,000$">
+          <TextBlock.RenderTransform>
+            <TranslateTransform
+              X="117.5"
+              Y="0" />
+          </TextBlock.RenderTransform>
+        </TextBlock>
+        <Canvas
+          Width="107"
+          Height="20">
+          <Canvas.RenderTransform>
+            <TranslateTransform
+              X="141.5"
+              Y="53" />
+          </Canvas.RenderTransform>
+          <Canvas
+            Width="9"
+            Height="9">
+            <Canvas.RenderTransform>
+              <TranslateTransform
+                X="0"
+                Y="5.5" />
+            </Canvas.RenderTransform>
+            <Canvas
+              Width="9"
+              Height="9">
+              <Path
+                Stretch="Fill"
+                Data="M9 1.06847C9 1.06847 9 8.14137 9 8.14137C9 8.5957 8.6291 8.96474 8.17151 8.96629C8.17151 8.96629 1.07654 8.99999 1.07654 8.99999C0.618391 9.00225 0.244385 8.63621 0.242826 8.17731C0.2412 7.72299 0.612107 7.35241 1.07135 7.35087C1.07135 7.35087 6.17167 7.3224 6.17167 7.3224C6.17167 7.3224 0.243486 1.40773 0.243486 1.40773C-0.081162 1.08549 -0.081162 0.563209 0.243486 0.241484C0.568134 -0.0802371 1.09433 -0.0807525 1.41846 0.241484C1.41846 0.241484 7.33782 6.14606 7.33782 6.14606C7.33782 6.14606 7.33783 1.06847 7.33783 1.06847C7.33783 0.614763 7.71181 0.243546 8.16892 0.243546C8.62604 0.243546 9 0.614763 9 1.06847C9 1.06847 9 1.06847 9 1.06847Z"
+                Width="9"
+                Height="9">
+                <Path.Fill>
+                  <SolidColorBrush
+                    Color="#9F586D" />
+                </Path.Fill>
+              </Path>
+            </Canvas>
+          </Canvas>
+          <Canvas
+            Width="90"
+            Height="20">
+            <Canvas.RenderTransform>
+              <TranslateTransform
+                X="17"
+                Y="0" />
+            </Canvas.RenderTransform>
+            <Canvas
+              Width="25"
+              Height="20">
+              <TextBlock
+                Width="25"
+                Height="20"
+                LineHeight="19.359375"
+                TextWrapping="Wrap"
+                TextAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Inter Tight"
+                FontSize="16"
+                FontWeight="Medium"
+                FontStretch="Normal"
+                Foreground="#B45262"
+                Text="8%" />
+            </Canvas>
+            <Canvas
+              Width="61"
+              Height="20">
+              <Canvas.RenderTransform>
+                <TranslateTransform
+                  X="29"
+                  Y="0" />
+              </Canvas.RenderTransform>
+              <TextBlock
+                Width="61"
+                Height="20"
+                LineHeight="19.359375"
+                TextWrapping="Wrap"
+                TextAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="Inter Tight"
+                FontSize="16"
+                FontWeight="Medium"
+                FontStretch="Normal"
+                Foreground="#B45262"
+                Text="(-$***)" />
+            </Canvas>
+          </Canvas>
+        </Canvas>
+      </Canvas>
+      <Canvas
+        Width="390"
+        Height="184">
+        <Canvas.RenderTransform>
+          <TranslateTransform
+            X="0"
+            Y="105" />
+        </Canvas.RenderTransform>
+        <Canvas
+          Width="390"
+          Height="131">
+          <Path
+            Stretch="Fill"
+            Data="M0 50.0599L11.9779 60.0599L26.3514 55.0599L37.8501 66.5599C37.8501 66.5599 49.4297 41.2416 51.2654 58.3099C53.1011 75.3782 57.973 88.31 57.973 88.31L71.8674 77.4349C71.8674 77.4349 76.7622 76.4023 78.5749 83.1849C80.3876 89.9674 86.7199 94.1849 86.7199 94.1849L94.8649 91.2474L121.695 77.4349L121.695 66.5599L133.194 36.6223C133.194 36.6223 135.793 10.9699 142.297 23.4036C148.802 35.8373 149.314 31.6232 150.442 41.7496C151.57 51.8762 145.756 51.95 150.442 58.3099C155.129 64.6698 158.684 101.44 164.816 94.185C170.948 86.9298 169.039 84.5291 170.307 77.415L172.961 55.0599L172.961 31.502C174.581 27.3718 176.967 37.1008 182.064 50.0599C187.161 63.019 189.959 123.016 194.926 123.002C198.983 122.991 203.792 112.6 205.541 94.185C206.826 80.6529 213.605 84.8507 212.727 77.4349C211.859 70.0948 217.045 68.063 222.789 66.5599C228.532 65.0569 220.566 47.827 234.767 58.3099C248.967 68.7928 249.964 -0.21053 250.098 0.000466051C260.621 16.5324 258.363 31.0191 263.034 31.5019C267.705 31.9848 265.657 56.0769 270.701 58.3099C275.744 60.5428 282.875 45.9581 286.032 60.06C289.19 74.1618 293.035 76.5811 300.405 77.4348C307.776 78.2886 309.249 73.2795 312.862 77.4349C316.476 81.5903 321.28 83.5415 325.798 83.1849C330.317 82.8284 330.33 83.5415 335.86 83.1849C341.39 82.8284 345.799 81.8906 350.713 83.1849C355.626 84.4792 360.295 88.31 360.295 88.31L378.501 88.31L390 94.1849"
+            Width="390"
+            Height="123"
+            Stroke="#BBAFE7"
+            StrokeThickness="2"
+            StrokeDashOffset="1">
+            <Path.RenderTransform>
+              <TranslateTransform
+                X="0"
+                Y="4" />
+            </Path.RenderTransform>
+          </Path>
+        </Canvas>
+        <Canvas
+          Width="196"
+          Height="37">
+          <Canvas.RenderTransform>
+            <TranslateTransform
+              X="97"
+              Y="147" />
+          </Canvas.RenderTransform>
+          <Canvas
+            Width="36"
+            Height="37">
+            <TextBlock
+              Width="14"
+              Height="15"
+              LineHeight="14.519531"
+              TextWrapping="Wrap"
+              TextAlignment="Center"
+              VerticalAlignment="Center"
+              FontFamily="Inter Tight"
+              FontSize="12"
+              FontWeight="Medium"
+              FontStretch="Normal"
+              Foreground="#97949A"
+              Text="1D">
+              <TextBlock.RenderTransform>
+                <TranslateTransform
+                  X="10.5"
+                  Y="10" />
+              </TextBlock.RenderTransform>
+            </TextBlock>
+          </Canvas>
+          <Canvas
+            Width="36"
+            Height="37">
+            <Canvas.Background>
+              <SolidColorBrush
+                Color="#282529" />
+            </Canvas.Background>
+            <Canvas.RenderTransform>
+              <TranslateTransform
+                X="40"
+                Y="0" />
+            </Canvas.RenderTransform>
+            <TextBlock
+              Width="17"
+              Height="15"
+              LineHeight="14.519531"
+              TextWrapping="Wrap"
+              TextAlignment="Center"
+              VerticalAlignment="Center"
+              FontFamily="Inter Tight"
+              FontSize="12"
+              FontWeight="Medium"
+              FontStretch="Normal"
+              Foreground="#DDD5E6"
+              Text="1W">
+              <TextBlock.RenderTransform>
+                <TranslateTransform
+                  X="9"
+                  Y="10" />
+              </TextBlock.RenderTransform>
+            </TextBlock>
+          </Canvas>
+          <Canvas
+            Width="36"
+            Height="37">
+            <Canvas.RenderTransform>
+              <TranslateTransform
+                X="80"
+                Y="0" />
+            </Canvas.RenderTransform>
+            <TextBlock
+              Width="16"
+              Height="15"
+              LineHeight="14.519531"
+              TextWrapping="Wrap"
+              TextAlignment="Center"
+              VerticalAlignment="Center"
+              FontFamily="Inter Tight"
+              FontSize="12"
+              FontWeight="Medium"
+              FontStretch="Normal"
+              Foreground="#97949A"
+              Text="1M">
+              <TextBlock.RenderTransform>
+                <TranslateTransform
+                  X="9.5"
+                  Y="10" />
+              </TextBlock.RenderTransform>
+            </TextBlock>
+          </Canvas>
+          <Canvas
+            Width="36"
+            Height="37">
+            <Canvas.RenderTransform>
+              <TranslateTransform
+                X="120"
+                Y="0" />
+            </Canvas.RenderTransform>
+            <TextBlock
+              Width="14"
+              Height="15"
+              LineHeight="14.519531"
+              TextWrapping="Wrap"
+              TextAlignment="Center"
+              VerticalAlignment="Center"
+              FontFamily="Inter Tight"
+              FontSize="12"
+              FontWeight="Medium"
+              FontStretch="Normal"
+              Foreground="#97949A"
+              Text="1Y">
+              <TextBlock.RenderTransform>
+                <TranslateTransform
+                  X="10.5"
+                  Y="10" />
+              </TextBlock.RenderTransform>
+            </TextBlock>
+          </Canvas>
+          <Canvas
+            Width="36"
+            Height="37">
+            <Canvas.RenderTransform>
+              <TranslateTransform
+                X="160"
+                Y="0" />
+            </Canvas.RenderTransform>
+            <TextBlock
+              Width="23"
+              Height="15"
+              LineHeight="14.519531"
+              TextWrapping="Wrap"
+              TextAlignment="Center"
+              VerticalAlignment="Center"
+              FontFamily="Inter Tight"
+              FontSize="12"
+              FontWeight="Medium"
+              FontStretch="Normal"
+              Foreground="#97949A"
+              Text="ALL">
+              <TextBlock.RenderTransform>
+                <TranslateTransform
+                  X="6"
+                  Y="10" />
+              </TextBlock.RenderTransform>
+            </TextBlock>
+          </Canvas>
+        </Canvas>
+      </Canvas>
+    </Canvas>
+    <Canvas
+      Width="359"
+      Height="55">
+      <Canvas.RenderTransform>
+        <TranslateTransform
+          X="15.5"
+          Y="436" />
+      </Canvas.RenderTransform>
+      <Canvas
+        Width="63"
+        Height="55">
+        <Canvas.Background>
+          <SolidColorBrush
+            Color="#1A171B" />
+        </Canvas.Background>
+        <Path
+          Width="14"
+          Height="14"
+          Stroke="#FFFFFF"
+          StrokeThickness="1.8"
+          StrokeDashOffset="1">
+          <Path.RenderTransform>
+            <TranslateTransform
+              X="24.5"
+              Y="10" />
+          </Path.RenderTransform>
+          <Path.Data>
+            <GeometryGroup>
+              <PathGeometry
+                Figures="M0 14L0 0" />
+              <PathGeometry
+                Figures="M0 0L14 0" />
+            </GeometryGroup>
+          </Path.Data>
+        </Path>
+        <TextBlock
+          Width="21"
+          Height="15"
+          LineHeight="14.519531"
+          TextWrapping="Wrap"
+          TextAlignment="Center"
+          VerticalAlignment="Center"
+          FontFamily="Inter Tight"
+          FontSize="12"
+          FontWeight="Medium"
+          FontStretch="Normal"
+          Foreground="#FFFFFF"
+          Text="Buy">
+          <TextBlock.RenderTransform>
+            <TranslateTransform
+              X="21"
+              Y="30" />
+          </TextBlock.RenderTransform>
+        </TextBlock>
+      </Canvas>
+      <Canvas
+        Width="63"
+        Height="55">
+        <Canvas.Background>
+          <SolidColorBrush
+            Color="#1A171B" />
+        </Canvas.Background>
+        <Canvas.RenderTransform>
+          <TranslateTransform
+            X="74"
+            Y="0" />
+        </Canvas.RenderTransform>
+        <Path
+          Width="14"
+          Height="14"
+          Stroke="#FFFFFF"
+          StrokeThickness="1.5"
+          StrokeDashOffset="1">
+          <Path.RenderTransform>
+            <TranslateTransform
+              X="24.5"
+              Y="10" />
+          </Path.RenderTransform>
+          <Path.Data>
+            <GeometryGroup>
+              <PathGeometry
+                Figures="M2.96334 0L0 2.64411" />
+              <PathGeometry
+                Figures="M2.96334 2.64451L0 0" />
+              <PathGeometry
+                Figures="M13.0268 0L13.0268 4.35549L0 4.35549" />
+              <PathGeometry
+                Figures="M0 2.64411L2.96294 0" />
+              <PathGeometry
+                Figures="M0 0L2.96294 2.64451" />
+              <PathGeometry
+                Figures="M0 4.35549L0 0L13.0268 0" />
+            </GeometryGroup>
+          </Path.Data>
+        </Path>
+        <TextBlock
+          Width="30"
+          Height="15"
+          LineHeight="14.519531"
+          TextWrapping="Wrap"
+          TextAlignment="Center"
+          VerticalAlignment="Center"
+          FontFamily="Inter Tight"
+          FontSize="12"
+          FontWeight="Medium"
+          FontStretch="Normal"
+          Foreground="#FFFFFF"
+          Text="Swap">
+          <TextBlock.RenderTransform>
+            <TranslateTransform
+              X="16.5"
+              Y="30" />
+          </TextBlock.RenderTransform>
+        </TextBlock>
+      </Canvas>
+      <Canvas
+        Width="63"
+        Height="55">
+        <Canvas.Background>
+          <SolidColorBrush
+            Color="#1A171B" />
+        </Canvas.Background>
+        <Canvas.RenderTransform>
+          <TranslateTransform
+            X="148"
+            Y="0" />
+        </Canvas.RenderTransform>
+        <Path
+          Width="10.5"
+          Height="14"
+          Stroke="#FFFFFF"
+          StrokeThickness="1.8"
+          StrokeDashOffset="1">
+          <Path.RenderTransform>
+            <TranslateTransform
+              X="26.25"
+              Y="10" />
+          </Path.RenderTransform>
+          <Path.Data>
+            <GeometryGroup>
+              <PathGeometry
+                Figures="M0 14L0 0" />
+              <PathGeometry
+                Figures="M0 0L5.25 5.58873" />
+              <PathGeometry
+                Figures="M5.25 0L0 5.58873" />
+            </GeometryGroup>
+          </Path.Data>
+        </Path>
+        <TextBlock
+          Width="28"
+          Height="15"
+          LineHeight="14.519531"
+          TextWrapping="Wrap"
+          TextAlignment="Center"
+          VerticalAlignment="Center"
+          FontFamily="Inter Tight"
+          FontSize="12"
+          FontWeight="Medium"
+          FontStretch="Normal"
+          Foreground="#FFFFFF"
+          Text="Send">
+          <TextBlock.RenderTransform>
+            <TranslateTransform
+              X="17.5"
+              Y="30" />
+          </TextBlock.RenderTransform>
+        </TextBlock>
+      </Canvas>
+      <Canvas
+        Width="63"
+        Height="55">
+        <Canvas.Background>
+          <SolidColorBrush
+            Color="#1A171B" />
+        </Canvas.Background>
+        <Canvas.RenderTransform>
+          <TranslateTransform
+            X="222"
+            Y="0" />
+        </Canvas.RenderTransform>
+        <Path
+          Width="11.67"
+          Height="14"
+          Stroke="#FFFFFF"
+          StrokeThickness="1.5"
+          StrokeDashOffset="1">
+          <Path.RenderTransform>
+            <TranslateTransform
+              X="37.33"
+              Y="24" />
+          </Path.RenderTransform>
+          <Path.Data>
+            <GeometryGroup>
+              <PathGeometry
+                Figures="M0 14L0 0" />
+              <PathGeometry
+                Figures="M0 0L5.83333 5.58873" />
+              <PathGeometry
+                Figures="M5.83333 0L0 5.58873" />
+            </GeometryGroup>
+          </Path.Data>
+        </Path>
+        <TextBlock
+          Width="42"
+          Height="15"
+          LineHeight="14.519531"
+          TextWrapping="Wrap"
+          TextAlignment="Center"
+          VerticalAlignment="Center"
+          FontFamily="Inter Tight"
+          FontSize="12"
+          FontWeight="Medium"
+          FontStretch="Normal"
+          Foreground="#FFFFFF"
+          Text="Receive">
+          <TextBlock.RenderTransform>
+            <TranslateTransform
+              X="10.5"
+              Y="30" />
+          </TextBlock.RenderTransform>
+        </TextBlock>
+      </Canvas>
+      <Canvas
+        Width="63"
+        Height="55">
+        <Canvas.Background>
+          <SolidColorBrush
+            Color="#1A171B" />
+        </Canvas.Background>
+        <Canvas.RenderTransform>
+          <TranslateTransform
+            X="296"
+            Y="0" />
+        </Canvas.RenderTransform>
+        <Path
+          Width="15.72"
+          Height="15">
+          <Path.Fill>
+            <SolidColorBrush
+              Color="#E2DEE3" />
+          </Path.Fill>
+          <Path.RenderTransform>
+            <TranslateTransform
+              X="23.64"
+              Y="9.5" />
+          </Path.RenderTransform>
+          <Path.Data>
+            <GeometryGroup>
+              <PathGeometry
+                Figures="M3.46306 4.01631C3.46306 4.01631 3.46306 2.55154 3.46306 2.55154C3.46306 1.13833 6.20704 0 9.59192 0C12.9759 0 15.7212 1.13833 15.7212 2.55154C15.7212 2.55154 15.7212 8.68124 15.7212 8.68124C15.7212 9.69073 14.3075 10.567 12.2581 10.9794C12.2581 10.9794 12.2581 12.4484 12.2581 12.4484C12.2581 13.8574 9.51416 15 6.12928 15C2.74398 15 0 13.8574 0 12.4484C0 12.4484 0 6.3187 0 6.3187C0 5.30497 1.41366 4.43299 3.46306 4.01631C3.46306 4.01631 3.46306 4.01631 3.46306 4.01631Z" />
+              <PathGeometry
+                Figures="M10.2152 0C9.97292 0.150333 9.69328 0.292119 9.381 0.416654C8.27704 0.867705 6.77017 1.14263 5.10781 1.14263C2.97509 1.14263 1.09795 0.687274 0 0C0 0 0 1.65377 0 1.65377C0 2.04468 1.75602 3.183 5.10781 3.183C8.45918 3.183 10.2152 2.04468 10.2152 1.65377C10.2152 1.65377 10.2152 0 10.2152 0C10.2152 0 10.2152 0 10.2152 0Z" />
+              <PathGeometry
+                Figures="M5.56872 3.1787C7.16965 3.12716 8.37027 2.81359 9.14905 2.47423C9.85481 2.16496 10.2152 1.8342 10.2152 1.65377C10.2152 1.65377 10.2152 0 10.2152 0C9.97336 0.154633 9.69328 0.292119 9.38144 0.420953C8.27749 0.867705 6.77017 1.14262 5.10781 1.14262C4.54897 1.14262 4.00773 1.11253 3.49355 1.05668C3.128 1.01374 2.7762 0.957894 2.44159 0.889203C1.44932 0.691574 0.606103 0.382308 0 0C0 0 0 1.65377 0 1.65377C0 2.04897 1.75602 3.1873 5.10781 3.1873C5.26504 3.1873 5.41838 3.183 5.56872 3.1787C5.56872 3.1787 5.56872 3.1787 5.56872 3.1787Z" />
+              <PathGeometry
+                Figures="M2.44159 2.79209C2.753 2.86084 3.09365 2.92098 3.46306 2.96822C3.95962 3.02837 4.50815 3.06701 5.10781 3.06701C5.26504 3.06701 5.41838 3.06271 5.56872 3.05841C7.15592 3.00687 8.35609 2.6933 9.13874 2.35394C9.84877 2.04468 10.2152 1.71391 10.2152 1.53348C10.2152 1.26719 9.42696 0.670101 7.8982 0.304966C7.27062 0.154633 6.51804 0.0429448 5.64391 0.00859945C5.46993 0.00429972 5.29123 0 5.10781 0C4.50815 0 3.95962 0.0386451 3.46306 0.0987887C3.09365 0.146033 2.753 0.206177 2.44159 0.27492C0.831183 0.640029 0 1.26289 0 1.53348C0 1.8041 0.831183 2.42698 2.44159 2.79209C2.44159 2.79209 2.44159 2.79209 2.44159 2.79209Z" />
+              <PathGeometry
+                Figures="M0 2.91238C1.60996 2.54727 2.44159 1.92439 2.44159 1.65377C2.44159 1.65377 2.44159 0 2.44159 0C1.83548 0.378008 0.992266 0.687274 0 0.889203C0 0.889203 0 2.91238 0 2.91238C0 2.91238 0 2.91238 0 2.91238Z" />
+              <PathGeometry
+                Figures="M0.884877 2.91235C2.49483 2.55154 3.32646 1.92869 3.32646 1.65377C3.32646 1.65377 3.32646 0 3.32646 0C2.54724 0.48967 1.37628 0.859106 0 1.03521C0.561428 1.42182 0.884877 1.87284 0.884877 2.35821C0.884877 2.35821 0.884877 2.91235 0.884877 2.91235C0.884877 2.91235 0.884877 2.91235 0.884877 2.91235Z" />
+              <PathGeometry
+                Figures="M4.57129 3.05411C4.74527 3.06271 4.92397 3.06701 5.10739 3.06701C8.43039 3.06701 10.2152 1.92869 10.2152 1.53351C10.2152 1.13833 8.45918 0 5.10739 0C1.75602 0 0 1.14262 0 1.53351C0 1.79553 0.789078 2.39691 2.31828 2.76202C2.94586 2.91238 3.69802 3.02407 4.57129 3.05411C4.57129 3.05411 4.57129 3.05411 4.57129 3.05411Z" />
+            </GeometryGroup>
+          </Path.Data>
+        </Path>
+        <TextBlock
+          Width="24"
+          Height="15"
+          LineHeight="14.519531"
+          TextWrapping="Wrap"
+          TextAlignment="Center"
+          VerticalAlignment="Center"
+          FontFamily="Inter Tight"
+          FontSize="12"
+          FontWeight="Medium"
+          FontStretch="Normal"
+          Foreground="#FFFFFF"
+          Text="Earn">
+          <TextBlock.RenderTransform>
+            <TranslateTransform
+              X="19.5"
+              Y="30.5" />
+          </TextBlock.RenderTransform>
+        </TextBlock>
+      </Canvas>
+    </Canvas>
+    <Canvas
+      Width="390"
+      Height="64">
+      <Canvas.RenderTransform>
+        <TranslateTransform
+          X="0"
+          Y="507" />
+      </Canvas.RenderTransform>
+      <Canvas
+        Width="164"
+        Height="38">
+        <Canvas.RenderTransform>
+          <TranslateTransform
+            X="16"
+            Y="13" />
+        </Canvas.RenderTransform>
+        <Canvas
+          ClipToBounds="True"
+          Width="38"
+          Height="38">
+          <Ellipse
+            Width="38"
+            Height="38">
+            <Ellipse.Fill>
+              <SolidColorBrush
+                Color="#FF9800" />
+            </Ellipse.Fill>
+          </Ellipse>
+          <Rectangle
+            Width="8"
+            Height="8">
+            <Rectangle.Fill>
+              <SolidColorBrush
+                Color="#FFFFFF" />
+            </Rectangle.Fill>
+            <Rectangle.RenderTransform>
+              <TranslateTransform
+                X="15"
+                Y="15" />
+            </Rectangle.RenderTransform>
+          </Rectangle>
+        </Canvas>
+        <Canvas
+          Width="114"
+          Height="37">
+          <Canvas.RenderTransform>
+            <TranslateTransform
+              X="50"
+              Y="0.5" />
+          </Canvas.RenderTransform>
+          <TextBlock
+            Width="100"
+            Height="17"
+            LineHeight="16.939453"
+            TextWrapping="Wrap"
+            TextAlignment="Left"
+            VerticalAlignment="Top"
+            FontFamily="Inter Tight"
+            FontSize="14"
+            FontWeight="SemiBold"
+            FontStretch="Normal"
+            Foreground="#FEF8FF"
+            Text="Cryptocurrency" />
+          <Canvas
+            Width="79"
+            Height="16">
+            <Canvas.RenderTransform>
+              <TranslateTransform
+                X="0"
+                Y="21" />
+            </Canvas.RenderTransform>
+            <TextBlock
+              Width="19"
+              Height="16"
+              LineHeight="15.729492"
+              TextWrapping="Wrap"
+              TextAlignment="Left"
+              VerticalAlignment="Top"
+              FontFamily="Inter Tight"
+              FontSize="13"
+              FontWeight="Medium"
+              FontStretch="Normal"
+              Foreground="#979498"
+              Text="***" />
+            <TextBlock
+              Width="52"
+              Height="16"
+              LineHeight="15.729492"
+              TextWrapping="Wrap"
+              TextAlignment="Left"
+              VerticalAlignment="Top"
+              FontFamily="Inter Tight"
+              FontSize="13"
+              FontWeight="Medium"
+              FontStretch="Normal"
+              Foreground="#979498"
+              Text="SYMBOL">
+              <TextBlock.RenderTransform>
+                <TranslateTransform
+                  X="27"
+                  Y="0" />
+              </TextBlock.RenderTransform>
+            </TextBlock>
+          </Canvas>
+        </Canvas>
+      </Canvas>
+      <Canvas
+        Width="50"
+        Height="44">
+        <Canvas.RenderTransform>
+          <TranslateTransform
+            X="324"
+            Y="10" />
+        </Canvas.RenderTransform>
+        <Canvas
+          Width="35"
+          Height="20">
+          <Canvas.RenderTransform>
+            <TranslateTransform
+              X="15"
+              Y="0" />
+          </Canvas.RenderTransform>
+          <TextBlock
+            Width="35"
+            Height="20"
+            LineHeight="19.359375"
+            TextWrapping="Wrap"
+            TextAlignment="Right"
+            VerticalAlignment="Top"
+            FontFamily="Inter Tight"
+            FontSize="16"
+            FontWeight="SemiBold"
+            FontStretch="Normal"
+            Foreground="#FEF8FF"
+            Text="$***" />
+        </Canvas>
+        <Canvas
+          Width="39"
+          Height="20">
+          <Canvas.RenderTransform>
+            <TranslateTransform
+              X="11"
+              Y="24" />
+          </Canvas.RenderTransform>
+          <Canvas
+            Width="9"
+            Height="9">
+            <Canvas.RenderTransform>
+              <TranslateTransform
+                X="0"
+                Y="14.5" />
+            </Canvas.RenderTransform>
+            <Path
+              Stretch="Fill"
+              Data="M9 1.06847C9 1.06847 9 8.14137 9 8.14137C9 8.5957 8.6291 8.96474 8.17151 8.96629C8.17151 8.96629 1.07654 8.99999 1.07654 8.99999C0.618391 9.00225 0.244385 8.63621 0.242826 8.17731C0.2412 7.72299 0.612107 7.35241 1.07135 7.35087C1.07135 7.35087 6.17167 7.3224 6.17167 7.3224C6.17167 7.3224 0.243486 1.40773 0.243486 1.40773C-0.081162 1.08549 -0.081162 0.563209 0.243486 0.241484C0.568134 -0.0802371 1.09433 -0.0807525 1.41846 0.241484C1.41846 0.241484 7.33782 6.14606 7.33782 6.14606C7.33782 6.14606 7.33783 1.06847 7.33783 1.06847C7.33783 0.614763 7.71181 0.243546 8.16892 0.243546C8.62604 0.243546 9 0.614763 9 1.06847C9 1.06847 9 1.06847 9 1.06847Z"
+              Width="9"
+              Height="9">
+              <Path.Fill>
+                <SolidColorBrush
+                  Color="#789F58" />
+              </Path.Fill>
+              <Path.RenderTransform>
+                <TranslateTransform
+                  X="0"
+                  Y="0" />
+              </Path.RenderTransform>
+            </Path>
+          </Canvas>
+          <TextBlock
+            Width="22"
+            Height="20"
+            LineHeight="19.359375"
+            TextWrapping="Wrap"
+            TextAlignment="Right"
+            VerticalAlignment="Top"
+            FontFamily="Inter Tight"
+            FontSize="16"
+            FontWeight="Regular"
+            FontStretch="Normal"
+            Foreground="#789F58"
+            Text="8%">
+            <TextBlock.RenderTransform>
+              <TranslateTransform
+                X="17"
+                Y="0" />
+            </TextBlock.RenderTransform>
+          </TextBlock>
+        </Canvas>
+      </Canvas>
+    </Canvas>
+  </Canvas>
+</Canvas>

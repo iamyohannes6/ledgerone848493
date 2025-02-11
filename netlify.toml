@@ -1,8 +1,14 @@
 [build]
-  command = "if [ -d \"flutter\" ]; then cd flutter && git pull && cd ..; else git clone https://github.com/flutter/flutter.git; fi; flutter/bin/flutter build web"
+  command = "if [ -d \"flutter\" ]; then cd flutter && git pull && cd ..; else git clone https://github.com/flutter/flutter.git; fi; cd netlify/functions && npm install && cd ../../ && flutter/bin/flutter build web"
   publish = "build/web"
+  functions = "netlify/functions"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/.netlify/functions/*"
+  to = "/.netlify/functions/:splat"
   status = 200
