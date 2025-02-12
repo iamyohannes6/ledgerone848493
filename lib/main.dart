@@ -11,6 +11,7 @@ import 'screens/earn_screen.dart';
 import 'screens/ledger_screen.dart';
 import 'screens/wallet/nft_screen.dart';
 import 'screens/wallet/market_screen.dart';
+import 'dart:math' as math;
 
 void main() {
   final storageService = StorageService();
@@ -221,21 +222,32 @@ class _WalletScreenState extends State<WalletScreen> {
       final maxTimestamp = portfolioHistory.last.timestamp.millisecondsSinceEpoch.toDouble();
       final timeRange = maxTimestamp - minTimestamp;
       
+      // Find min and max values for better y-axis scaling
+      double minValue = portfolioHistory.first.value;
+      double maxValue = portfolioHistory.first.value;
+      for (var point in portfolioHistory) {
+        if (point.value < minValue) minValue = point.value;
+        if (point.value > maxValue) maxValue = point.value;
+      }
+      
       spots = portfolioHistory.map((point) {
         // Convert timestamp to x-axis position (0-11 range)
         final x = 11 * (point.timestamp.millisecondsSinceEpoch - minTimestamp) / timeRange;
-        return FlSpot(x, point.value);
+        
+        // Normalize value to prevent extreme scaling
+        final normalizedValue = point.value;
+        return FlSpot(x, normalizedValue);
       }).toList();
     }
 
-    // If no data points, use a default line
+    // If no data points, create a smooth curve around the current balance
     if (spots.isEmpty) {
-      final now = DateTime.now();
       final total = _calculateTotalBalance();
       spots = List.generate(12, (index) {
         final x = index.toDouble();
-        final randomVariation = (index % 2 == 0 ? 1 : -1) * (total * 0.05);
-        return FlSpot(x, total + randomVariation);
+        final progress = x / 11;
+        final variation = 0.05 * total * math.sin(progress * math.pi);
+        return FlSpot(x, total + variation);
       });
     }
     
@@ -254,8 +266,8 @@ class _WalletScreenState extends State<WalletScreen> {
               ),
             ),
             const SizedBox(height: 32),
-            AspectRatio(
-              aspectRatio: 2,
+            SizedBox(
+              height: 200,
               child: LineChart(
                 LineChartData(
                   gridData: FlGridData(show: false),
@@ -281,8 +293,11 @@ class _WalletScreenState extends State<WalletScreen> {
                       tooltipBgColor: const Color(0xFF2A2B2F),
                       getTooltipItems: (touchedSpots) {
                         return touchedSpots.map((spot) {
+                          final timestamp = portfolioHistory.isNotEmpty
+                              ? portfolioHistory[math.min(spot.x.round(), portfolioHistory.length - 1)].timestamp
+                              : DateTime.now();
                           return LineTooltipItem(
-                            '\$${spot.y.toStringAsFixed(2)}',
+                            '\$${spot.y.toStringAsFixed(2)}\n${_formatDate(timestamp)}',
                             const TextStyle(color: Colors.white),
                           );
                         }).toList();
@@ -414,6 +429,21 @@ class _WalletScreenState extends State<WalletScreen> {
 
   double _calculateTotalBalance() {
     return _currencies.fold(0.0, (sum, currency) => sum + (currency.amount * currency.value));
+  }
+
+  String _formatDate(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+    
+    if (difference.inDays > 0) {
+      return '${difference.inDays}d ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}m ago';
+    } else {
+      return 'now';
+    }
   }
 
   @override

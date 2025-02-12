@@ -8,6 +8,7 @@ class StorageService {
   static const String _portfolioHistoryKey = 'portfolio_history';
   List<CryptoCurrency> _currencies = [];
   List<PortfolioDataPoint> _portfolioHistory = [];
+  DateTime? _lastDataPointTime;
 
   StorageService() {
     _loadFromStorage();
@@ -34,7 +35,13 @@ class StorageService {
     if (storedData != null) {
       try {
         final List<dynamic> jsonList = json.decode(storedData);
-        _portfolioHistory = jsonList.map((json) => PortfolioDataPoint.fromJson(json)).toList();
+        _portfolioHistory = jsonList
+            .map((json) => PortfolioDataPoint.fromJson(json))
+            .toList()
+          ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+        if (_portfolioHistory.isNotEmpty) {
+          _lastDataPointTime = _portfolioHistory.last.timestamp;
+        }
       } catch (e) {
         print('Error loading portfolio history: $e');
         _portfolioHistory = [];
@@ -100,19 +107,68 @@ class StorageService {
 
   void addPortfolioDataPoint(double value) {
     final now = DateTime.now();
-    _portfolioHistory.add(PortfolioDataPoint(timestamp: now, value: value));
     
-    // Keep only last 365 days of data
-    final oneYearAgo = now.subtract(const Duration(days: 365));
-    _portfolioHistory.removeWhere((point) => point.timestamp.isBefore(oneYearAgo));
+    // Only add a new point if enough time has passed
+    if (_lastDataPointTime == null ||
+        now.difference(_lastDataPointTime!).inMinutes >= _getMinimumInterval()) {
+      _portfolioHistory.add(PortfolioDataPoint(timestamp: now, value: value));
+      _lastDataPointTime = now;
+      
+      // Keep only relevant historical data
+      _cleanupHistoricalData();
+      _savePortfolioHistory();
+    }
+  }
+
+  int _getMinimumInterval() {
+    // Determine minimum interval between data points based on oldest data
+    if (_portfolioHistory.isEmpty) return 1;
+    final oldest = _portfolioHistory.first.timestamp;
+    final age = DateTime.now().difference(oldest);
     
-    _savePortfolioHistory();
+    if (age.inDays > 365) return 240; // 4 hours for > 1 year
+    if (age.inDays > 30) return 60;   // 1 hour for > 1 month
+    if (age.inDays > 7) return 30;    // 30 minutes for > 1 week
+    return 5;                         // 5 minutes for <= 1 week
+  }
+
+  void _cleanupHistoricalData() {
+    final now = DateTime.now();
+    
+    // Remove data points that are too old
+    _portfolioHistory.removeWhere((point) {
+      final age = now.difference(point.timestamp);
+      if (age.inDays > 365) return true;
+      if (age.inDays > 30 && age.inMinutes % 240 != 0) return true;  // Keep 4-hour intervals
+      if (age.inDays > 7 && age.inMinutes % 60 != 0) return true;    // Keep 1-hour intervals
+      if (age.inDays > 1 && age.inMinutes % 30 != 0) return true;    // Keep 30-minute intervals
+      return false;
+    });
+
+    // Sort the data points by timestamp
+    _portfolioHistory.sort((a, b) => a.timestamp.compareTo(b.timestamp));
   }
 
   List<PortfolioDataPoint> getPortfolioHistory(Duration period) {
     final now = DateTime.now();
     final cutoff = now.subtract(period);
-    return _portfolioHistory.where((point) => point.timestamp.isAfter(cutoff)).toList();
+    
+    // Get data points for the selected period
+    final filteredPoints = _portfolioHistory
+        .where((point) => point.timestamp.isAfter(cutoff))
+        .toList()
+      ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+    // If no points exist, create initial point
+    if (filteredPoints.isEmpty) {
+      final total = getTotalBalance();
+      filteredPoints.add(PortfolioDataPoint(
+        timestamp: now,
+        value: total,
+      ));
+    }
+
+    return filteredPoints;
   }
 
   void _savePortfolioHistory() {
