@@ -215,33 +215,28 @@ class _WalletScreenState extends State<WalletScreen> {
     final portfolioHistory = widget.storageService.getPortfolioHistory(_selectedPeriod);
     
     // Convert history to graph points
-    final spots = <FlSpot>[];
+    List<FlSpot> spots = [];
     if (portfolioHistory.isNotEmpty) {
-      final firstTimestamp = portfolioHistory.first.timestamp.millisecondsSinceEpoch.toDouble();
-      final lastTimestamp = portfolioHistory.last.timestamp.millisecondsSinceEpoch.toDouble();
-      final timeRange = lastTimestamp - firstTimestamp;
+      final minTimestamp = portfolioHistory.first.timestamp.millisecondsSinceEpoch.toDouble();
+      final maxTimestamp = portfolioHistory.last.timestamp.millisecondsSinceEpoch.toDouble();
+      final timeRange = maxTimestamp - minTimestamp;
       
-      spots.addAll(portfolioHistory.map((point) {
-        final x = (point.timestamp.millisecondsSinceEpoch.toDouble() - firstTimestamp) / timeRange * 11;
+      spots = portfolioHistory.map((point) {
+        // Convert timestamp to x-axis position (0-11 range)
+        final x = 11 * (point.timestamp.millisecondsSinceEpoch - minTimestamp) / timeRange;
         return FlSpot(x, point.value);
-      }));
+      }).toList();
     }
 
     // If no data points, use a default line
     if (spots.isEmpty) {
       final now = DateTime.now();
-      final period = _selectedPeriod.inMilliseconds.toDouble();
-      final value = _calculateTotalBalance();
-      
-      spots.addAll([
-        FlSpot(0, value * 0.9),
-        FlSpot(2.6, value * 1.1),
-        FlSpot(4.9, value * 0.95),
-        FlSpot(6.8, value * 1.05),
-        FlSpot(8, value * 0.98),
-        FlSpot(9.5, value * 1.02),
-        FlSpot(11, value),
-      ]);
+      final total = _calculateTotalBalance();
+      spots = List.generate(12, (index) {
+        final x = index.toDouble();
+        final randomVariation = (index % 2 == 0 ? 1 : -1) * (total * 0.05);
+        return FlSpot(x, total + randomVariation);
+      });
     }
     
     return SingleChildScrollView(
@@ -259,9 +254,8 @@ class _WalletScreenState extends State<WalletScreen> {
               ),
             ),
             const SizedBox(height: 32),
-            SizedBox(
-              height: 100,
-              width: double.infinity,
+            AspectRatio(
+              aspectRatio: 2,
               child: LineChart(
                 LineChartData(
                   gridData: FlGridData(show: false),
@@ -281,6 +275,20 @@ class _WalletScreenState extends State<WalletScreen> {
                     ),
                   ],
                   backgroundColor: Colors.transparent,
+                  lineTouchData: LineTouchData(
+                    enabled: true,
+                    touchTooltipData: LineTouchTooltipData(
+                      tooltipBgColor: const Color(0xFF2A2B2F),
+                      getTooltipItems: (touchedSpots) {
+                        return touchedSpots.map((spot) {
+                          return LineTooltipItem(
+                            '\$${spot.y.toStringAsFixed(2)}',
+                            const TextStyle(color: Colors.white),
+                          );
+                        }).toList();
+                      },
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -289,7 +297,6 @@ class _WalletScreenState extends State<WalletScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: timePeriods.map((period) {
-                final isSelected = _selectedPeriod == _getPeriodDuration(period);
                 return GestureDetector(
                   onTap: () {
                     setState(() {
@@ -300,18 +307,20 @@ class _WalletScreenState extends State<WalletScreen> {
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: isSelected ? const Color(0xFF9D7BEE) : Colors.transparent,
+                      color: _getPeriodDuration(period) == _selectedPeriod
+                          ? const Color(0xFF2A2B2F)
+                          : Colors.transparent,
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: const Color(0xFF9D7BEE),
-                        width: 1,
-                      ),
                     ),
                     child: Text(
                       period,
                       style: TextStyle(
-                        color: isSelected ? Colors.white : const Color(0xFF9D7BEE),
-                        fontWeight: FontWeight.w500,
+                        color: _getPeriodDuration(period) == _selectedPeriod
+                            ? Colors.white
+                            : Colors.grey,
+                        fontWeight: _getPeriodDuration(period) == _selectedPeriod
+                            ? FontWeight.w600
+                            : FontWeight.normal,
                       ),
                     ),
                   ),
