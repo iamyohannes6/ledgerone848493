@@ -212,6 +212,10 @@ class _WalletScreenState extends State<WalletScreen> {
       {'icon': Icons.account_balance, 'label': 'Earn'},
     ];
 
+    // Calculate total balance and update portfolio history
+    final currentBalance = _calculateTotalBalance();
+    widget.storageService.addPortfolioDataPoint(currentBalance);
+
     // Get portfolio history for selected time period
     final portfolioHistory = widget.storageService.getPortfolioHistory(_selectedPeriod);
     
@@ -233,21 +237,17 @@ class _WalletScreenState extends State<WalletScreen> {
       spots = portfolioHistory.map((point) {
         // Convert timestamp to x-axis position (0-11 range)
         final x = 11 * (point.timestamp.millisecondsSinceEpoch - minTimestamp) / timeRange;
-        
-        // Normalize value to prevent extreme scaling
-        final normalizedValue = point.value;
-        return FlSpot(x, normalizedValue);
+        return FlSpot(x, point.value);
       }).toList();
     }
 
     // If no data points, create a smooth curve around the current balance
     if (spots.isEmpty) {
-      final total = _calculateTotalBalance();
       spots = List.generate(12, (index) {
         final x = index.toDouble();
         final progress = x / 11;
-        final variation = 0.05 * total * math.sin(progress * math.pi);
-        return FlSpot(x, total + variation);
+        final variation = 0.05 * currentBalance * math.sin(progress * math.pi);
+        return FlSpot(x, currentBalance + variation);
       });
     }
     
@@ -258,7 +258,7 @@ class _WalletScreenState extends State<WalletScreen> {
           children: [
             const SizedBox(height: 32),
             Text(
-              '\$${_calculateTotalBalance().toStringAsFixed(2)}',
+              '\$${currentBalance.toStringAsFixed(2)}',
               style: GoogleFonts.inter(
                 fontSize: 48,
                 fontWeight: FontWeight.bold,
@@ -266,13 +266,19 @@ class _WalletScreenState extends State<WalletScreen> {
               ),
             ),
             const SizedBox(height: 32),
-            SizedBox(
+            Container(
               height: 200,
+              width: double.infinity,
+              padding: const EdgeInsets.only(right: 16),
               child: LineChart(
                 LineChartData(
                   gridData: FlGridData(show: false),
                   titlesData: FlTitlesData(show: false),
                   borderData: FlBorderData(show: false),
+                  minX: 0,
+                  maxX: 11,
+                  minY: spots.map((e) => e.y).reduce(math.min) * 0.95,
+                  maxY: spots.map((e) => e.y).reduce(math.max) * 1.05,
                   lineBarsData: [
                     LineChartBarData(
                       spots: spots,
@@ -283,6 +289,14 @@ class _WalletScreenState extends State<WalletScreen> {
                       belowBarData: BarAreaData(
                         show: true,
                         color: const Color(0xFF9D7BEE).withOpacity(0.1),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            const Color(0xFF9D7BEE).withOpacity(0.2),
+                            const Color(0xFF9D7BEE).withOpacity(0.0),
+                          ],
+                        ),
                       ),
                     ),
                   ],
