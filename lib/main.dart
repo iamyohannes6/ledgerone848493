@@ -156,14 +156,14 @@ class _WalletScreenState extends State<WalletScreen> {
 
   Widget _buildWalletContent() {
     return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Row(
-            children: _tabs.map((tab) {
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: _tabs.map((tab) {
               final isSelected = _tabs.indexOf(tab) == _selectedTabIndex;
-              return Padding(
-                padding: const EdgeInsets.only(right: 16.0),
+                return Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
                 child: InkWell(
                   onTap: () {
                     setState(() {
@@ -186,13 +186,13 @@ class _WalletScreenState extends State<WalletScreen> {
                         fontSize: 20,
                         fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                       ),
+                      ),
                     ),
                   ),
-                ),
-              );
-            }).toList(),
+                );
+              }).toList(),
+            ),
           ),
-        ),
         Expanded(
           child: _getTabContent(_selectedTabIndex),
         ),
@@ -239,23 +239,30 @@ class _WalletScreenState extends State<WalletScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            const SizedBox(height: 32),
-            Text(
+          const SizedBox(height: 32),
+          Text(
               '\$${_calculateTotalBalance().toStringAsFixed(2)}',
-              style: GoogleFonts.inter(
-                fontSize: 48,
-                fontWeight: FontWeight.bold,
+            style: GoogleFonts.inter(
+              fontSize: 48,
+              fontWeight: FontWeight.bold,
                 color: Colors.white,
-              ),
             ),
-            const SizedBox(height: 32),
-            SizedBox(
-              height: 100,
+          ),
+          const SizedBox(height: 32),
+          SizedBox(
+            height: 100,
+            width: MediaQuery.of(context).size.width - 32,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: LineChart(
                 LineChartData(
                   gridData: FlGridData(show: false),
                   titlesData: FlTitlesData(show: false),
                   borderData: FlBorderData(show: false),
+                  minX: 0,
+                  maxX: 11,
+                  minY: spots.isEmpty ? 0 : spots.map((e) => e.y).reduce((a, b) => a < b ? a : b) * 0.95,
+                  maxY: spots.isEmpty ? 100 : spots.map((e) => e.y).reduce((a, b) => a > b ? a : b) * 1.05,
                   lineBarsData: [
                     LineChartBarData(
                       spots: spots,
@@ -273,7 +280,8 @@ class _WalletScreenState extends State<WalletScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+          ),
+          const SizedBox(height: 16),
             // Time period buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -341,9 +349,9 @@ class _WalletScreenState extends State<WalletScreen> {
                     ),
                   );
                 }).toList(),
-              ),
             ),
-            const SizedBox(height: 32),
+          ),
+          const SizedBox(height: 32),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -353,11 +361,11 @@ class _WalletScreenState extends State<WalletScreen> {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 58),
                   child: _CryptoListItem(
-                    icon: currency.icon,
-                    name: currency.name,
-                    symbol: currency.symbol,
-                    amount: currency.amount.toString(),
-                    value: '\$${currency.value.toStringAsFixed(2)}',
+                  icon: currency.icon,
+                  name: currency.name,
+                  symbol: currency.symbol,
+                  amount: currency.amount.toString(),
+                  value: '\$${currency.value.toStringAsFixed(2)}',
                     percentChange24h: currency.percentChange24h,
                     iconColor: Color(int.parse('0xFF${currency.iconColor}')),
                     logoUrl: currency.logoUrl,
@@ -379,11 +387,11 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
           stops: [0.0, 0.3],
-          colors: [
+                colors: [
             Color(0xFF503C6B),
             Color(0xFF151018),
           ],
@@ -461,11 +469,11 @@ class _WalletScreenState extends State<WalletScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _buildNavItem(0, 'Wallet', Icons.account_balance_wallet_outlined),
-                  _buildNavItem(1, 'Earn', Icons.show_chart),
+                _buildNavItem(1, 'Earn', Icons.show_chart),
                   const SizedBox(width: 40),
-                  _buildNavItem(3, 'Discover', Icons.public),
-                  _buildNavItem(4, 'Ledger', Icons.credit_card),
-                ],
+                _buildNavItem(3, 'Discover', Icons.public),
+                _buildNavItem(4, 'Ledger', Icons.credit_card),
+              ],
               ),
             ),
           ),
@@ -499,14 +507,14 @@ class _WalletScreenState extends State<WalletScreen> {
       },
       child: SizedBox(
         height: 60,
-        child: Column(
+      child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
+        children: [
+          Icon(
+            icon,
               color: isSelected ? const Color(0xFF9D7BEE) : Colors.grey,
               size: 24,
-            ),
+          ),
             const SizedBox(height: 4),
             Text(
               label,
@@ -553,25 +561,25 @@ class _CryptoListItem extends StatelessWidget {
                 width: 58,
                 height: 58,
                 child: Stack(
-                  children: [
+        children: [
                     Positioned(
                       right: 0,
                       child: Container(
                         width: 40,
                         height: 40,
-                        decoration: BoxDecoration(
-                          color: iconColor,
+            decoration: BoxDecoration(
+              color: iconColor,
                           shape: BoxShape.circle,
-                        ),
-                        child: Center(
+            ),
+            child: Center(
                           child: Image.network(
                             logoUrl,
                             width: 28,
                             height: 28,
                             errorBuilder: (context, error, stackTrace) {
                               return Text(
-                                icon,
-                                style: const TextStyle(
+                icon,
+                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -600,9 +608,9 @@ class _CryptoListItem extends StatelessWidget {
                             '\$',
                             style: TextStyle(
                               fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
                           ),
                         ),
                       ),
@@ -632,41 +640,41 @@ class _CryptoListItem extends StatelessWidget {
                         ),
                       );
                     },
-                  ),
-                ),
               ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: const TextStyle(
-                  fontSize: 16,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 16,
                   height: 24/16,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
               ),
-              Text(
-                '$amount $symbol',
+                Text(
+                  '$amount $symbol',
                 style: const TextStyle(
                   color: Colors.grey,
-                  fontSize: 14,
+                    fontSize: 14,
                   height: 24/14,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 16,
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 16,
                 height: 24/16,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
@@ -679,10 +687,10 @@ class _CryptoListItem extends StatelessWidget {
                 height: 24/14,
                 color: percentChange24h >= 0 ? const Color(0xFF00FFA3) : const Color(0xFFFF4D4D),
                 fontWeight: FontWeight.w500,
-              ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
       ],
     );
   }

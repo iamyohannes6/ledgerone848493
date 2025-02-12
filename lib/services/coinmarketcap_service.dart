@@ -3,13 +3,8 @@ import 'package:http/http.dart' as http;
 import '../models/crypto_currency.dart';
 
 class CoinMarketCapService {
-  // In development, use localhost. In production, use the Netlify domain
-  static String get _baseUrl {
-    const isProd = bool.fromEnvironment('dart.vm.product');
-    return isProd 
-        ? '/.netlify/functions/getCryptoData'
-        : 'http://localhost:8888/.netlify/functions/getCryptoData';
-  }
+  // Use Netlify function endpoint
+  static const String _baseUrl = '/.netlify/functions/getCryptoData';
 
   Future<List<CryptoCurrency>> getAvailableCryptocurrencies() async {
     try {
