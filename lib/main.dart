@@ -251,37 +251,29 @@ class _WalletScreenState extends State<WalletScreen> {
           const SizedBox(height: 32),
           SizedBox(
             height: 100,
-            width: MediaQuery.of(context).size.width - 32,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: LineChart(
-                LineChartData(
-                  gridData: FlGridData(show: false),
-                  titlesData: FlTitlesData(show: false),
-                  borderData: FlBorderData(show: false),
-                  minX: 0,
-                  maxX: 11,
-                  minY: spots.isEmpty ? 0 : spots.map((e) => e.y).reduce((a, b) => a < b ? a : b) * 0.95,
-                  maxY: spots.isEmpty ? 100 : spots.map((e) => e.y).reduce((a, b) => a > b ? a : b) * 1.05,
-                  lineBarsData: [
-                    LineChartBarData(
+            child: LineChart(
+              LineChartData(
+                gridData: FlGridData(show: false),
+                titlesData: FlTitlesData(show: false),
+                borderData: FlBorderData(show: false),
+                lineBarsData: [
+                  LineChartBarData(
                       spots: spots,
-                      isCurved: true,
-                      color: const Color(0xFF9D7BEE),
-                      barWidth: 2,
-                      dotData: FlDotData(show: false),
-                      belowBarData: BarAreaData(
-                        show: true,
-                        color: const Color(0xFF9D7BEE).withOpacity(0.1),
-                      ),
+                    isCurved: true,
+                    color: const Color(0xFF9D7BEE),
+                    barWidth: 2,
+                    dotData: FlDotData(show: false),
+                    belowBarData: BarAreaData(
+                      show: true,
+                      color: const Color(0xFF9D7BEE).withOpacity(0.1),
                     ),
-                  ],
+                  ),
+                ],
                   backgroundColor: Colors.transparent,
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
             // Time period buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

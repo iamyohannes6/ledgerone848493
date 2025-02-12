@@ -1,12 +1,5 @@
 [build]
-  command = """
-    git clone https://github.com/flutter/flutter.git;
-    export PATH="$PATH:`pwd`/flutter/bin";
-    flutter precache;
-    flutter pub get;
-    flutter build web;
-    cd netlify/functions && npm install
-  """
+  command = "if [ -d \"flutter\" ]; then cd flutter && git pull && cd ..; else git clone https://github.com/flutter/flutter.git; fi; cd netlify/functions && npm install && cd ../../ && flutter/bin/flutter build web"
   publish = "build/web"
   functions = "netlify/functions"
 
