@@ -7,7 +7,7 @@
   <meta name="description" content="Live Ledger - A modern cryptocurrency wallet">
 
   <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Live Ledger">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
@@ -20,7 +20,7 @@
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = null;
+    var serviceWorkerVersion = null;
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
@@ -65,11 +65,51 @@
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
-      _flutter.loader.load({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
+      var loading = document.querySelector('#loading');
+      
+      _flutter = {
+        loader: {
+          loadEntrypoint: function(options) {
+            return Promise.resolve();
+          }
         }
-      });
+      };
+
+      window.flutterWebRenderer = "html";
+      
+      var scriptLoaded = false;
+      function loadMainDartJs() {
+        if (scriptLoaded) {
+          return;
+        }
+        scriptLoaded = true;
+        var scriptTag = document.createElement('script');
+        scriptTag.src = 'main.dart.js';
+        scriptTag.type = 'application/javascript';
+        document.body.append(scriptTag);
+      }
+
+      if ('serviceWorker' in navigator) {
+        var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
+        navigator.serviceWorker.register(serviceWorkerUrl)
+          .then((reg) => {
+            function waitForActivation(serviceWorker) {
+              serviceWorker.addEventListener('statechange', () => {
+                if (serviceWorker.state == 'activated') {
+                  console.log('Installed new service worker.');
+                  loadMainDartJs();
+                }
+              });
+            }
+            if (!reg.active && (reg.installing || reg.waiting)) {
+              waitForActivation(reg.installing || reg.waiting);
+            } else {
+              loadMainDartJs();
+            }
+          });
+      } else {
+        loadMainDartJs();
+      }
     });
   </script>
 </body>

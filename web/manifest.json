@@ -3,9 +3,9 @@
     "short_name": "Live Ledger",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#FFFFFF",
+    "background_color": "#1A1B1F",
     "theme_color": "#9D7BEE",
-    "description": "A modern cryptocurrency wallet application",
+    "description": "A modern cryptocurrency wallet web application",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
