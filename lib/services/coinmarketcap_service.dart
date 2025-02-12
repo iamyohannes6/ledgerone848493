@@ -7,13 +7,13 @@ class CoinMarketCapService {
   static String get _baseUrl {
     const isProd = bool.fromEnvironment('dart.vm.product');
     return isProd 
-        ? '/.netlify/functions/getCryptoData'
-        : 'http://localhost:8888/.netlify/functions/getCryptoData';
+        ? '/api'
+        : 'http://localhost:8888/.netlify/functions';
   }
 
   Future<List<CryptoCurrency>> getAvailableCryptocurrencies() async {
     try {
-      final response = await http.get(Uri.parse('$_baseUrl/cryptocurrencies'));
+      final response = await http.get(Uri.parse('$_baseUrl/getCryptoData/cryptocurrencies'));
       
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -29,7 +29,7 @@ class CoinMarketCapService {
 
   Future<Map<String, dynamic>> getLatestPrices() async {
     try {
-      final response = await http.get(Uri.parse('$_baseUrl/prices'));
+      final response = await http.get(Uri.parse('$_baseUrl/getCryptoData/prices'));
       
       if (response.statusCode == 200) {
         return json.decode(response.body);

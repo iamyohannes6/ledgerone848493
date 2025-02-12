@@ -7,8 +7,10 @@
   from = "/*"
   to = "/index.html"
   status = 200
+  force = true
 
 [[redirects]]
-  from = "/.netlify/functions/*"
+  from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+  force = true
