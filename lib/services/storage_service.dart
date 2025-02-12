@@ -5,13 +5,13 @@ import '../models/portfolio_history.dart';
 
 class StorageService {
   static const String _cryptoKey = 'crypto_currencies';
-  static const String _historyKey = 'portfolio_history';
+  static const String _portfolioHistoryKey = 'portfolio_history';
   List<CryptoCurrency> _currencies = [];
-  PortfolioHistory _portfolioHistory = PortfolioHistory(dataPoints: []);
+  List<PortfolioDataPoint> _portfolioHistory = [];
 
   StorageService() {
     _loadFromStorage();
-    _loadHistoryFromStorage();
+    _loadPortfolioHistory();
   }
 
   void _loadFromStorage() {
@@ -29,45 +29,17 @@ class StorageService {
     }
   }
 
-  void _loadHistoryFromStorage() {
-    final storedHistory = html.window.localStorage[_historyKey];
-    if (storedHistory != null) {
+  void _loadPortfolioHistory() {
+    final storedData = html.window.localStorage[_portfolioHistoryKey];
+    if (storedData != null) {
       try {
-        final json = jsonDecode(storedHistory);
-        _portfolioHistory = PortfolioHistory.fromJson(json);
+        final List<dynamic> jsonList = json.decode(storedData);
+        _portfolioHistory = jsonList.map((json) => PortfolioDataPoint.fromJson(json)).toList();
       } catch (e) {
-        print('Error loading history from storage: $e');
-        _portfolioHistory = PortfolioHistory(dataPoints: []);
+        print('Error loading portfolio history: $e');
+        _portfolioHistory = [];
       }
     }
-  }
-
-  void _saveHistoryToStorage() {
-    final jsonData = _portfolioHistory.toJson();
-    html.window.localStorage[_historyKey] = jsonEncode(jsonData);
-  }
-
-  void addPortfolioDataPoint(double value) {
-    final newPoint = PortfolioDataPoint(
-      timestamp: DateTime.now(),
-      value: value,
-    );
-    
-    // Add new point
-    final updatedPoints = [..._portfolioHistory.dataPoints, newPoint];
-    
-    // Keep only last 365 days of data to prevent storage from growing too large
-    final oneYearAgo = DateTime.now().subtract(const Duration(days: 365));
-    final filteredPoints = updatedPoints
-        .where((point) => point.timestamp.isAfter(oneYearAgo))
-        .toList();
-    
-    _portfolioHistory = PortfolioHistory(dataPoints: filteredPoints);
-    _saveHistoryToStorage();
-  }
-
-  List<PortfolioDataPoint> getPortfolioHistory(String period) {
-    return _portfolioHistory.getDataForPeriod(period);
   }
 
   void _initializeDefaultCurrencies() {
@@ -126,6 +98,28 @@ class StorageService {
     html.window.localStorage[_cryptoKey] = json.encode(jsonList);
   }
 
+  void addPortfolioDataPoint(double value) {
+    final now = DateTime.now();
+    _portfolioHistory.add(PortfolioDataPoint(timestamp: now, value: value));
+    
+    // Keep only last 365 days of data
+    final oneYearAgo = now.subtract(const Duration(days: 365));
+    _portfolioHistory.removeWhere((point) => point.timestamp.isBefore(oneYearAgo));
+    
+    _savePortfolioHistory();
+  }
+
+  List<PortfolioDataPoint> getPortfolioHistory(Duration period) {
+    final now = DateTime.now();
+    final cutoff = now.subtract(period);
+    return _portfolioHistory.where((point) => point.timestamp.isAfter(cutoff)).toList();
+  }
+
+  void _savePortfolioHistory() {
+    final jsonList = _portfolioHistory.map((point) => point.toJson()).toList();
+    html.window.localStorage[_portfolioHistoryKey] = json.encode(jsonList);
+  }
+
   List<CryptoCurrency> getCryptoCurrencies() {
     return List.from(_currencies);
   }
@@ -145,10 +139,6 @@ class StorageService {
   void updateCurrencies(List<CryptoCurrency> currencies) {
     _currencies = currencies;
     _saveToStorage();
-    
-    // Add a new data point whenever currencies are updated
-    final totalValue = getTotalBalance();
-    addPortfolioDataPoint(totalValue);
   }
 
   void deleteCurrency(int index) {
@@ -159,7 +149,10 @@ class StorageService {
   }
 
   double getTotalBalance() {
-    return _currencies.fold(0.0, (sum, currency) => sum + (currency.amount * currency.value));
+    final total = _currencies.fold(0.0, (sum, currency) => sum + (currency.amount * currency.value));
+    // Add data point to history when getting total balance
+    addPortfolioDataPoint(total);
+    return total;
   }
 
   Future<void> saveCryptoCurrencies(List<CryptoCurrency> currencies) async {

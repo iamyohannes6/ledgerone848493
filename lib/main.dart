@@ -11,7 +11,6 @@ import 'screens/earn_screen.dart';
 import 'screens/ledger_screen.dart';
 import 'screens/wallet/nft_screen.dart';
 import 'screens/wallet/market_screen.dart';
-import 'models/portfolio_history.dart';
 
 void main() {
   final storageService = StorageService();
@@ -66,7 +65,6 @@ class WalletScreen extends StatefulWidget {
 class _WalletScreenState extends State<WalletScreen> {
   int _selectedIndex = 0;
   int _selectedTabIndex = 0;
-  String _selectedTimePeriod = '1D';
   final List<String> _tabs = ['Crypto', 'NFTs', 'Market'];
   late List<CryptoCurrency> _currencies;
   final RefreshController _refreshController = RefreshController(
@@ -156,14 +154,14 @@ class _WalletScreenState extends State<WalletScreen> {
 
   Widget _buildWalletContent() {
     return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              children: _tabs.map((tab) {
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            children: _tabs.map((tab) {
               final isSelected = _tabs.indexOf(tab) == _selectedTabIndex;
-                return Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
+              return Padding(
+                padding: const EdgeInsets.only(right: 16.0),
                 child: InkWell(
                   onTap: () {
                     setState(() {
@@ -186,13 +184,13 @@ class _WalletScreenState extends State<WalletScreen> {
                         fontSize: 20,
                         fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                       ),
-                      ),
                     ),
                   ),
-                );
-              }).toList(),
-            ),
+                ),
+              );
+            }).toList(),
           ),
+        ),
         Expanded(
           child: _getTabContent(_selectedTabIndex),
         ),
@@ -211,26 +209,29 @@ class _WalletScreenState extends State<WalletScreen> {
       {'icon': Icons.account_balance, 'label': 'Earn'},
     ];
 
-    // Get portfolio history data for the selected period
-    final historyData = widget.storageService.getPortfolioHistory(_selectedTimePeriod);
+    // Get portfolio history for selected time period
+    Duration selectedPeriod = const Duration(days: 7); // Default to 1W
+    final portfolioHistory = widget.storageService.getPortfolioHistory(selectedPeriod);
     
-    // Convert history data to chart points
-    final List<FlSpot> spots = [];
-    if (historyData.isNotEmpty) {
-      final minTime = historyData.first.timestamp.millisecondsSinceEpoch.toDouble();
-      final timeRange = historyData.last.timestamp.millisecondsSinceEpoch - historyData.first.timestamp.millisecondsSinceEpoch;
-      
-      spots.addAll(
-        historyData.map((point) {
-          final x = (point.timestamp.millisecondsSinceEpoch - minTime) / timeRange * 11;
-          return FlSpot(x, point.value);
-        }),
-      );
-    } else {
-      // If no data, show a flat line
-      spots.addAll([
-        const FlSpot(0, 0),
-        const FlSpot(11, 0),
+    // Convert history to graph points
+    final spots = portfolioHistory.map((point) {
+      // Convert timestamp to x-axis position (0-11 range)
+      final periodInHours = selectedPeriod.inHours;
+      final hoursAgo = DateTime.now().difference(point.timestamp).inHours;
+      final x = 11 * (1 - (hoursAgo / periodInHours));
+      return FlSpot(x, point.value);
+    }).toList();
+
+    // If no data points, use a default line
+    if (spots.isEmpty) {
+      spots.addAll(const [
+        FlSpot(0, 3),
+        FlSpot(2.6, 2),
+        FlSpot(4.9, 5),
+        FlSpot(6.8, 2.5),
+        FlSpot(8, 4),
+        FlSpot(9.5, 3),
+        FlSpot(11, 4),
       ]);
     }
     
@@ -239,36 +240,37 @@ class _WalletScreenState extends State<WalletScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-          const SizedBox(height: 32),
-          Text(
+            const SizedBox(height: 32),
+            Text(
               '\$${_calculateTotalBalance().toStringAsFixed(2)}',
-            style: GoogleFonts.inter(
-              fontSize: 48,
-              fontWeight: FontWeight.bold,
+              style: GoogleFonts.inter(
+                fontSize: 48,
+                fontWeight: FontWeight.bold,
                 color: Colors.white,
+              ),
             ),
-          ),
-          const SizedBox(height: 32),
-          SizedBox(
-            height: 100,
-            child: LineChart(
-              LineChartData(
-                gridData: FlGridData(show: false),
-                titlesData: FlTitlesData(show: false),
-                borderData: FlBorderData(show: false),
-                lineBarsData: [
-                  LineChartBarData(
+            const SizedBox(height: 32),
+            SizedBox(
+              height: 100,
+              width: double.infinity,
+              child: LineChart(
+                LineChartData(
+                  gridData: FlGridData(show: false),
+                  titlesData: FlTitlesData(show: false),
+                  borderData: FlBorderData(show: false),
+                  lineBarsData: [
+                    LineChartBarData(
                       spots: spots,
-                    isCurved: true,
-                    color: const Color(0xFF9D7BEE),
-                    barWidth: 2,
-                    dotData: FlDotData(show: false),
-                    belowBarData: BarAreaData(
-                      show: true,
-                      color: const Color(0xFF9D7BEE).withOpacity(0.1),
+                      isCurved: true,
+                      color: const Color(0xFF9D7BEE),
+                      barWidth: 2,
+                      dotData: FlDotData(show: false),
+                      belowBarData: BarAreaData(
+                        show: true,
+                        color: const Color(0xFF9D7BEE).withOpacity(0.1),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
                   backgroundColor: Colors.transparent,
                 ),
               ),
@@ -278,25 +280,30 @@ class _WalletScreenState extends State<WalletScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: timePeriods.map((period) {
-                final isSelected = period == _selectedTimePeriod;
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      _selectedTimePeriod = period;
+                      selectedPeriod = _getPeriodDuration(period);
                     });
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: isSelected ? const Color(0xFF2A2B2F) : Colors.transparent,
+                      color: _getPeriodDuration(period) == selectedPeriod
+                          ? const Color(0xFF2A2B2F)
+                          : Colors.transparent,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       period,
                       style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.grey,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                        color: _getPeriodDuration(period) == selectedPeriod
+                            ? Colors.white
+                            : Colors.grey,
+                        fontWeight: _getPeriodDuration(period) == selectedPeriod
+                            ? FontWeight.w600
+                            : FontWeight.normal,
                       ),
                     ),
                   ),
@@ -341,9 +348,9 @@ class _WalletScreenState extends State<WalletScreen> {
                     ),
                   );
                 }).toList(),
+              ),
             ),
-          ),
-          const SizedBox(height: 32),
+            const SizedBox(height: 32),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -353,11 +360,11 @@ class _WalletScreenState extends State<WalletScreen> {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 58),
                   child: _CryptoListItem(
-                  icon: currency.icon,
-                  name: currency.name,
-                  symbol: currency.symbol,
-                  amount: currency.amount.toString(),
-                  value: '\$${currency.value.toStringAsFixed(2)}',
+                    icon: currency.icon,
+                    name: currency.name,
+                    symbol: currency.symbol,
+                    amount: currency.amount.toString(),
+                    value: '\$${currency.value.toStringAsFixed(2)}',
                     percentChange24h: currency.percentChange24h,
                     iconColor: Color(int.parse('0xFF${currency.iconColor}')),
                     logoUrl: currency.logoUrl,
@@ -371,6 +378,23 @@ class _WalletScreenState extends State<WalletScreen> {
     );
   }
 
+  Duration _getPeriodDuration(String period) {
+    switch (period) {
+      case '1D':
+        return const Duration(days: 1);
+      case '1W':
+        return const Duration(days: 7);
+      case '1M':
+        return const Duration(days: 30);
+      case '1Y':
+        return const Duration(days: 365);
+      case 'ALL':
+        return const Duration(days: 365 * 5); // 5 years
+      default:
+        return const Duration(days: 7);
+    }
+  }
+
   double _calculateTotalBalance() {
     return _currencies.fold(0.0, (sum, currency) => sum + (currency.amount * currency.value));
   }
@@ -379,11 +403,11 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
           stops: [0.0, 0.3],
-                colors: [
+          colors: [
             Color(0xFF503C6B),
             Color(0xFF151018),
           ],
@@ -461,11 +485,11 @@ class _WalletScreenState extends State<WalletScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _buildNavItem(0, 'Wallet', Icons.account_balance_wallet_outlined),
-                _buildNavItem(1, 'Earn', Icons.show_chart),
+                  _buildNavItem(1, 'Earn', Icons.show_chart),
                   const SizedBox(width: 40),
-                _buildNavItem(3, 'Discover', Icons.public),
-                _buildNavItem(4, 'Ledger', Icons.credit_card),
-              ],
+                  _buildNavItem(3, 'Discover', Icons.public),
+                  _buildNavItem(4, 'Ledger', Icons.credit_card),
+                ],
               ),
             ),
           ),
@@ -499,14 +523,14 @@ class _WalletScreenState extends State<WalletScreen> {
       },
       child: SizedBox(
         height: 60,
-      child: Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
+          children: [
+            Icon(
+              icon,
               color: isSelected ? const Color(0xFF9D7BEE) : Colors.grey,
               size: 24,
-          ),
+            ),
             const SizedBox(height: 4),
             Text(
               label,
@@ -553,25 +577,25 @@ class _CryptoListItem extends StatelessWidget {
                 width: 58,
                 height: 58,
                 child: Stack(
-        children: [
+                  children: [
                     Positioned(
                       right: 0,
                       child: Container(
                         width: 40,
                         height: 40,
-            decoration: BoxDecoration(
-              color: iconColor,
+                        decoration: BoxDecoration(
+                          color: iconColor,
                           shape: BoxShape.circle,
-            ),
-            child: Center(
+                        ),
+                        child: Center(
                           child: Image.network(
                             logoUrl,
                             width: 28,
                             height: 28,
                             errorBuilder: (context, error, stackTrace) {
                               return Text(
-                icon,
-                style: const TextStyle(
+                                icon,
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -600,9 +624,9 @@ class _CryptoListItem extends StatelessWidget {
                             '\$',
                             style: TextStyle(
                               fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -632,41 +656,41 @@ class _CryptoListItem extends StatelessWidget {
                         ),
                       );
                     },
+                  ),
+                ),
               ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 16,
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                style: const TextStyle(
+                  fontSize: 16,
                   height: 24/16,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
               ),
-                Text(
-                  '$amount $symbol',
+              Text(
+                '$amount $symbol',
                 style: const TextStyle(
                   color: Colors.grey,
-                    fontSize: 14,
+                  fontSize: 14,
                   height: 24/14,
-                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 16,
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 16,
                 height: 24/16,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
@@ -679,10 +703,10 @@ class _CryptoListItem extends StatelessWidget {
                 height: 24/14,
                 color: percentChange24h >= 0 ? const Color(0xFF00FFA3) : const Color(0xFFFF4D4D),
                 fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ],
     );
   }

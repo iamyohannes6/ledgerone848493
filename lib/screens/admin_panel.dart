@@ -36,19 +36,19 @@ class _AdminPanelState extends State<AdminPanel> {
       // Update with latest prices from API
       final updatedCurrencies = await _coinService.getUpdatedCryptocurrencies(_availableCurrencies);
       
-        setState(() {
+      setState(() {
         _availableCurrencies = updatedCurrencies;
         _isLoading = false;
-        });
+      });
       
       // Save the updated currencies back to storage
       widget.storageService.updateCurrencies(_availableCurrencies);
-      } catch (e) {
+    } catch (e) {
       setState(() {
         _isLoading = false;
       });
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error loading cryptocurrencies: $e')),
         );
       }
@@ -65,7 +65,7 @@ class _AdminPanelState extends State<AdminPanel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2A2B2F),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -103,7 +103,7 @@ class _AdminPanelState extends State<AdminPanel> {
                   },
                 );
               },
-      ),
+            ),
     );
   }
 }
@@ -128,28 +128,28 @@ class CurrencyListItem extends StatelessWidget {
         title: Text('Edit ${currency.name} Amount'),
         content: TextField(
           controller: controller,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
           decoration: const InputDecoration(
             labelText: 'Amount',
             hintText: 'Enter amount',
           ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
         ),
-        TextButton(
-          onPressed: () {
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
               final amount = double.tryParse(controller.text);
               if (amount != null) {
                 onAmountChanged(amount);
                 Navigator.pop(context);
               }
-          },
-          child: const Text('Save'),
-        ),
-      ],
+            },
+            child: const Text('Save'),
+          ),
+        ],
       ),
     );
   }
@@ -164,7 +164,7 @@ class CurrencyListItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
-            children: [
+        children: [
           Container(
             width: 48,
             height: 48,
@@ -223,10 +223,10 @@ class CurrencyListItem extends StatelessWidget {
                       ),
                     ),
                   ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
-        ),
           Switch(
             value: currency.isEnabled,
             onChanged: onToggle,
