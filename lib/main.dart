@@ -233,23 +233,37 @@ class _WalletScreenState extends State<WalletScreen> {
         if (point.value < minValue) minValue = point.value;
         if (point.value > maxValue) maxValue = point.value;
       }
+
+      // Ensure we have a minimum range for the y-axis
+      if (maxValue - minValue < maxValue * 0.1) {
+        minValue = maxValue * 0.9;
+      }
       
       spots = portfolioHistory.map((point) {
         // Convert timestamp to x-axis position (0-11 range)
         final x = 11 * (point.timestamp.millisecondsSinceEpoch - minTimestamp) / timeRange;
         return FlSpot(x, point.value);
       }).toList();
+
+      // Sort spots by x value to ensure proper line drawing
+      spots.sort((a, b) => a.x.compareTo(b.x));
     }
 
     // If no data points, create a smooth curve around the current balance
     if (spots.isEmpty) {
+      final total = currentBalance;
       spots = List.generate(12, (index) {
         final x = index.toDouble();
         final progress = x / 11;
-        final variation = 0.05 * currentBalance * math.sin(progress * math.pi);
-        return FlSpot(x, currentBalance + variation);
+        final variation = 0.05 * total * math.sin(progress * math.pi);
+        return FlSpot(x, total + variation);
       });
     }
+
+    // Calculate y-axis range
+    final minY = spots.map((e) => e.y).reduce(math.min);
+    final maxY = spots.map((e) => e.y).reduce(math.max);
+    final yRange = maxY - minY;
     
     return SingleChildScrollView(
       child: Padding(
@@ -277,8 +291,8 @@ class _WalletScreenState extends State<WalletScreen> {
                   borderData: FlBorderData(show: false),
                   minX: 0,
                   maxX: 11,
-                  minY: spots.map((e) => e.y).reduce(math.min) * 0.95,
-                  maxY: spots.map((e) => e.y).reduce(math.max) * 1.05,
+                  minY: minY - (yRange * 0.1),
+                  maxY: maxY + (yRange * 0.1),
                   lineBarsData: [
                     LineChartBarData(
                       spots: spots,

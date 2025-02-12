@@ -108,9 +108,22 @@ class StorageService {
   void addPortfolioDataPoint(double value) {
     final now = DateTime.now();
     
-    // Only add a new point if enough time has passed
+    // Always add the first point
+    if (_portfolioHistory.isEmpty) {
+      _portfolioHistory.add(PortfolioDataPoint(timestamp: now, value: value));
+      _lastDataPointTime = now;
+      _savePortfolioHistory();
+      return;
+    }
+    
+    // Check if value has changed significantly (more than 1%)
+    final lastValue = _portfolioHistory.last.value;
+    final percentChange = ((value - lastValue) / lastValue).abs() * 100;
+    
+    // Add point if enough time has passed or value changed significantly
     if (_lastDataPointTime == null ||
-        now.difference(_lastDataPointTime!).inMinutes >= _getMinimumInterval()) {
+        now.difference(_lastDataPointTime!).inMinutes >= _getMinimumInterval() ||
+        percentChange > 1.0) {
       _portfolioHistory.add(PortfolioDataPoint(timestamp: now, value: value));
       _lastDataPointTime = now;
       
@@ -121,27 +134,26 @@ class StorageService {
   }
 
   int _getMinimumInterval() {
-    // Determine minimum interval between data points based on oldest data
     if (_portfolioHistory.isEmpty) return 1;
     final oldest = _portfolioHistory.first.timestamp;
     final age = DateTime.now().difference(oldest);
     
-    if (age.inDays > 365) return 240; // 4 hours for > 1 year
-    if (age.inDays > 30) return 60;   // 1 hour for > 1 month
-    if (age.inDays > 7) return 30;    // 30 minutes for > 1 week
-    return 5;                         // 5 minutes for <= 1 week
+    if (age.inDays > 365) return 240;    // 4 hours for > 1 year
+    if (age.inDays > 30) return 60;      // 1 hour for > 1 month
+    if (age.inDays > 7) return 15;       // 15 minutes for > 1 week
+    return 5;                            // 5 minutes for <= 1 week
   }
 
   void _cleanupHistoricalData() {
     final now = DateTime.now();
     
-    // Remove data points that are too old
+    // Keep more recent points for better graph resolution
     _portfolioHistory.removeWhere((point) {
       final age = now.difference(point.timestamp);
       if (age.inDays > 365) return true;
-      if (age.inDays > 30 && age.inMinutes % 240 != 0) return true;  // Keep 4-hour intervals
-      if (age.inDays > 7 && age.inMinutes % 60 != 0) return true;    // Keep 1-hour intervals
-      if (age.inDays > 1 && age.inMinutes % 30 != 0) return true;    // Keep 30-minute intervals
+      if (age.inDays > 30 && age.inMinutes % 240 != 0) return true;   // Keep 4-hour intervals
+      if (age.inDays > 7 && age.inMinutes % 60 != 0) return true;     // Keep 1-hour intervals
+      if (age.inDays > 1 && age.inMinutes % 15 != 0) return true;     // Keep 15-minute intervals
       return false;
     });
 
@@ -159,13 +171,20 @@ class StorageService {
         .toList()
       ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
-    // If no points exist, create initial point
+    // If no points exist for the period, create points with the current value
     if (filteredPoints.isEmpty) {
       final total = getTotalBalance();
-      filteredPoints.add(PortfolioDataPoint(
-        timestamp: now,
-        value: total,
-      ));
+      // Create a series of points leading up to now
+      final points = <PortfolioDataPoint>[];
+      for (int i = 12; i >= 0; i--) {
+        points.add(PortfolioDataPoint(
+          timestamp: now.subtract(Duration(
+            minutes: (period.inMinutes ~/ 12) * i,
+          )),
+          value: total,
+        ));
+      }
+      return points;
     }
 
     return filteredPoints;
