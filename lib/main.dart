@@ -73,11 +73,13 @@ class _WalletScreenState extends State<WalletScreen> {
     initialLoadStatus: LoadStatus.idle,
   );
   final CoinMarketCapService _coinService = CoinMarketCapService();
+  late Duration _selectedPeriod;
 
   @override
   void initState() {
     super.initState();
     _currencies = widget.storageService.getCryptoCurrencies();
+    _selectedPeriod = const Duration(days: 7);
     _fetchLatestPrices();
   }
 
@@ -210,28 +212,35 @@ class _WalletScreenState extends State<WalletScreen> {
     ];
 
     // Get portfolio history for selected time period
-    Duration selectedPeriod = const Duration(days: 7); // Default to 1W
-    final portfolioHistory = widget.storageService.getPortfolioHistory(selectedPeriod);
+    final portfolioHistory = widget.storageService.getPortfolioHistory(_selectedPeriod);
     
     // Convert history to graph points
-    final spots = portfolioHistory.map((point) {
-      // Convert timestamp to x-axis position (0-11 range)
-      final periodInHours = selectedPeriod.inHours;
-      final hoursAgo = DateTime.now().difference(point.timestamp).inHours;
-      final x = 11 * (1 - (hoursAgo / periodInHours));
-      return FlSpot(x, point.value);
-    }).toList();
+    final spots = <FlSpot>[];
+    if (portfolioHistory.isNotEmpty) {
+      final firstTimestamp = portfolioHistory.first.timestamp.millisecondsSinceEpoch.toDouble();
+      final lastTimestamp = portfolioHistory.last.timestamp.millisecondsSinceEpoch.toDouble();
+      final timeRange = lastTimestamp - firstTimestamp;
+      
+      spots.addAll(portfolioHistory.map((point) {
+        final x = (point.timestamp.millisecondsSinceEpoch.toDouble() - firstTimestamp) / timeRange * 11;
+        return FlSpot(x, point.value);
+      }));
+    }
 
     // If no data points, use a default line
     if (spots.isEmpty) {
-      spots.addAll(const [
-        FlSpot(0, 3),
-        FlSpot(2.6, 2),
-        FlSpot(4.9, 5),
-        FlSpot(6.8, 2.5),
-        FlSpot(8, 4),
-        FlSpot(9.5, 3),
-        FlSpot(11, 4),
+      final now = DateTime.now();
+      final period = _selectedPeriod.inMilliseconds.toDouble();
+      final value = _calculateTotalBalance();
+      
+      spots.addAll([
+        FlSpot(0, value * 0.9),
+        FlSpot(2.6, value * 1.1),
+        FlSpot(4.9, value * 0.95),
+        FlSpot(6.8, value * 1.05),
+        FlSpot(8, value * 0.98),
+        FlSpot(9.5, value * 1.02),
+        FlSpot(11, value),
       ]);
     }
     
@@ -280,30 +289,29 @@ class _WalletScreenState extends State<WalletScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: timePeriods.map((period) {
+                final isSelected = _selectedPeriod == _getPeriodDuration(period);
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      selectedPeriod = _getPeriodDuration(period);
+                      _selectedPeriod = _getPeriodDuration(period);
                     });
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: _getPeriodDuration(period) == selectedPeriod
-                          ? const Color(0xFF2A2B2F)
-                          : Colors.transparent,
+                      color: isSelected ? const Color(0xFF9D7BEE) : Colors.transparent,
                       borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: const Color(0xFF9D7BEE),
+                        width: 1,
+                      ),
                     ),
                     child: Text(
                       period,
                       style: TextStyle(
-                        color: _getPeriodDuration(period) == selectedPeriod
-                            ? Colors.white
-                            : Colors.grey,
-                        fontWeight: _getPeriodDuration(period) == selectedPeriod
-                            ? FontWeight.w600
-                            : FontWeight.normal,
+                        color: isSelected ? Colors.white : const Color(0xFF9D7BEE),
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
