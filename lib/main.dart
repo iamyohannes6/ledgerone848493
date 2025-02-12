@@ -11,6 +11,7 @@ import 'screens/earn_screen.dart';
 import 'screens/ledger_screen.dart';
 import 'screens/wallet/nft_screen.dart';
 import 'screens/wallet/market_screen.dart';
+import 'models/portfolio_history.dart';
 
 void main() {
   final storageService = StorageService();
@@ -65,6 +66,7 @@ class WalletScreen extends StatefulWidget {
 class _WalletScreenState extends State<WalletScreen> {
   int _selectedIndex = 0;
   int _selectedTabIndex = 0;
+  String _selectedTimePeriod = '1D';
   final List<String> _tabs = ['Crypto', 'NFTs', 'Market'];
   late List<CryptoCurrency> _currencies;
   final RefreshController _refreshController = RefreshController(
@@ -208,6 +210,29 @@ class _WalletScreenState extends State<WalletScreen> {
       {'icon': Icons.arrow_downward, 'label': 'Receive'},
       {'icon': Icons.account_balance, 'label': 'Earn'},
     ];
+
+    // Get portfolio history data for the selected period
+    final historyData = widget.storageService.getPortfolioHistory(_selectedTimePeriod);
+    
+    // Convert history data to chart points
+    final List<FlSpot> spots = [];
+    if (historyData.isNotEmpty) {
+      final minTime = historyData.first.timestamp.millisecondsSinceEpoch.toDouble();
+      final timeRange = historyData.last.timestamp.millisecondsSinceEpoch - historyData.first.timestamp.millisecondsSinceEpoch;
+      
+      spots.addAll(
+        historyData.map((point) {
+          final x = (point.timestamp.millisecondsSinceEpoch - minTime) / timeRange * 11;
+          return FlSpot(x, point.value);
+        }),
+      );
+    } else {
+      // If no data, show a flat line
+      spots.addAll([
+        const FlSpot(0, 0),
+        const FlSpot(11, 0),
+      ]);
+    }
     
     return SingleChildScrollView(
       child: Padding(
@@ -233,15 +258,7 @@ class _WalletScreenState extends State<WalletScreen> {
                   borderData: FlBorderData(show: false),
                   lineBarsData: [
                     LineChartBarData(
-                      spots: const [
-                        FlSpot(0, 3),
-                        FlSpot(2.6, 2),
-                        FlSpot(4.9, 5),
-                        FlSpot(6.8, 2.5),
-                        FlSpot(8, 4),
-                        FlSpot(9.5, 3),
-                        FlSpot(11, 4),
-                      ],
+                      spots: spots,
                       isCurved: true,
                       color: const Color(0xFF9D7BEE),
                       barWidth: 2,
@@ -261,18 +278,26 @@ class _WalletScreenState extends State<WalletScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: timePeriods.map((period) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: period == '1W' ? const Color(0xFF2A2B2F) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    period,
-                    style: TextStyle(
-                      color: period == '1W' ? Colors.white : Colors.grey,
-                      fontWeight: period == '1W' ? FontWeight.w600 : FontWeight.normal,
+                final isSelected = period == _selectedTimePeriod;
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _selectedTimePeriod = period;
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isSelected ? const Color(0xFF2A2B2F) : Colors.transparent,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      period,
+                      style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.grey,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      ),
                     ),
                   ),
                 );

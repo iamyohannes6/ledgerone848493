@@ -1,13 +1,17 @@
 import 'dart:convert';
 import 'dart:html' as html;
 import '../models/crypto_currency.dart';
+import '../models/portfolio_history.dart';
 
 class StorageService {
   static const String _cryptoKey = 'crypto_currencies';
+  static const String _historyKey = 'portfolio_history';
   List<CryptoCurrency> _currencies = [];
+  PortfolioHistory _portfolioHistory = PortfolioHistory(dataPoints: []);
 
   StorageService() {
     _loadFromStorage();
+    _loadHistoryFromStorage();
   }
 
   void _loadFromStorage() {
@@ -23,6 +27,47 @@ class StorageService {
     } else {
       _initializeDefaultCurrencies();
     }
+  }
+
+  void _loadHistoryFromStorage() {
+    final storedHistory = html.window.localStorage[_historyKey];
+    if (storedHistory != null) {
+      try {
+        final json = jsonDecode(storedHistory);
+        _portfolioHistory = PortfolioHistory.fromJson(json);
+      } catch (e) {
+        print('Error loading history from storage: $e');
+        _portfolioHistory = PortfolioHistory(dataPoints: []);
+      }
+    }
+  }
+
+  void _saveHistoryToStorage() {
+    final jsonData = _portfolioHistory.toJson();
+    html.window.localStorage[_historyKey] = jsonEncode(jsonData);
+  }
+
+  void addPortfolioDataPoint(double value) {
+    final newPoint = PortfolioDataPoint(
+      timestamp: DateTime.now(),
+      value: value,
+    );
+    
+    // Add new point
+    final updatedPoints = [..._portfolioHistory.dataPoints, newPoint];
+    
+    // Keep only last 365 days of data to prevent storage from growing too large
+    final oneYearAgo = DateTime.now().subtract(const Duration(days: 365));
+    final filteredPoints = updatedPoints
+        .where((point) => point.timestamp.isAfter(oneYearAgo))
+        .toList();
+    
+    _portfolioHistory = PortfolioHistory(dataPoints: filteredPoints);
+    _saveHistoryToStorage();
+  }
+
+  List<PortfolioDataPoint> getPortfolioHistory(String period) {
+    return _portfolioHistory.getDataForPeriod(period);
   }
 
   void _initializeDefaultCurrencies() {
@@ -100,6 +145,10 @@ class StorageService {
   void updateCurrencies(List<CryptoCurrency> currencies) {
     _currencies = currencies;
     _saveToStorage();
+    
+    // Add a new data point whenever currencies are updated
+    final totalValue = getTotalBalance();
+    addPortfolioDataPoint(totalValue);
   }
 
   void deleteCurrency(int index) {
